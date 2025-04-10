@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Kaminari",
+  "version": "0.1.0",
+  "description": "Tab links copy utility",
+  "icons": {
+    "16": "icons/favicon.png",
+    "512": "icons/512.png"
+  },
+  "permissions": ["clipboardWrite", "tabs"],
+  "host_permissions": [],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/favicon.png"
+    },
+    "default_popup": "popup.html"
+  }
+}
