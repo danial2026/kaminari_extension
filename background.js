@@ -111,7 +111,15 @@ chrome.commands.onCommand.addListener(async (command) => {
 
     // Filter out chrome:// URLs from the formatted output
     const linksText = tabs
-      .filter((tab) => !tab.url.startsWith("chrome://"))
+      .filter((tab) => 
+          tab.url &&
+          !tab.url.startsWith("chrome://") &&
+          !tab.url.startsWith("about:") &&
+          !tab.url.startsWith("edge://") &&
+          !tab.url.startsWith("brave://") &&
+          !tab.url.startsWith("opera://") &&
+          !tab.url.startsWith("vivaldi://")
+      )
       .map((tab) => `- [${tab.title}](${tab.url})`)
       .join("\n");
 
