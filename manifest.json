@@ -7,10 +7,33 @@
     "16": "icons/favicon.png",
     "512": "icons/512.png"
   },
-  "permissions": ["clipboardWrite", "tabs"],
-  "host_permissions": [],
+  "permissions": [
+    "clipboardWrite",
+    "tabs",
+    "scripting",
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+K"
+      },
+      "description": "Open Kaminari tab copy popup"
+    },
+    "copy_all_tabs": {
+      "suggested_key": {
+        "default": "Alt+Shift+K"
+      },
+      "description": "Copy all tab links"
+    }
   },
   "action": {
     "default_icon": {
