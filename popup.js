@@ -388,7 +388,7 @@ function updateFormatExamples() {
 
 // Check for selected tabs and update preview
 function checkSelectedTabs() {
-  chrome.tabs.query(
+  browser.tabs.query(
     { currentWindow: true, highlighted: true },
     function (tabs) {
       selectedTabs = tabs;
@@ -419,7 +419,7 @@ function updateTemplateVisibility() {
 // Initialize event listeners
 document.addEventListener("DOMContentLoaded", async function () {
   // Load all tabs and selected tabs when popup opens
-  chrome.tabs.query({ currentWindow: true }, function (tabs) {
+  browser.tabs.query({ currentWindow: true }, function (tabs) {
     currentTabs = tabs;
 
     // Now check for selected tabs
@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   // Add a message listener for tab selection changes while popup is open
-  chrome.runtime.onMessage.addListener(function (message) {
+  browser.runtime.onMessage.addListener(function (message) {
     if (message.action === "tabsSelected") {
       checkSelectedTabs();
     }
@@ -524,7 +524,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Copy all tabs button
   copyAllTabsBtn.addEventListener("click", async function () {
     try {
-      chrome.tabs.query({ currentWindow: true }, async function (tabs) {
+      browser.tabs.query({ currentWindow: true }, async function (tabs) {
         currentTabs = tabs;
         // Ensure we're showing all tabs after copying all
         if (showSelectedOnlyToggle) showSelectedOnlyToggle.checked = false;
@@ -559,7 +559,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Copy selected tabs button
   copySelectedTabsBtn.addEventListener("click", async function () {
     try {
-      chrome.tabs.query(
+      browser.tabs.query(
         { currentWindow: true, highlighted: true },
         async function (tabs) {
           if (!tabs || tabs.length === 0) {
