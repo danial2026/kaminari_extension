@@ -1,0 +1,22 @@
+# Build artifacts
+*.zip
+kaminari-firefox.zip
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Browser extension specific
+web-ext-artifacts/
