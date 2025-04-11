@@ -2,6 +2,25 @@
 
 A browser extension that helps you easily copy tab links from your browser in various formats.
 
+
+## Download
+
+### Chrome Version
+Coming soon to Chrome Web Store
+
+### Firefox Version
+Available on [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/kaminari/)
+
+
+## Branches
+
+### Main Branch
+Contains the Chrome version of the extension
+
+### Firefox Branch 
+Contains the Firefox-specific version of the extension with required manifest v2 compatibility changes
+
+
 ## Features
 
 - **Copy All Tabs**: Copy links from all tabs in the current window
@@ -83,19 +102,6 @@ Output:
 ```
 - [ ] [GitHub: Where the world builds software](https://github.com)
 - [ ] [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com)
-```
-
-#### Table Format
-```
-| [{{title}}]({{url}}) |
-| ---- |
-```
-Output:
-```
-| [GitHub: Where the world builds software](https://github.com) |
-| ---- |
-| [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com) |
-| ---- |
 ```
 
 #### With Group By Domain Enabled
