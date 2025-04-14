@@ -75,3 +75,125 @@ When grouping by domain is enabled, domain headers are automatically added in th
 ### Markdown Format Examples
 
 #### Basic Bulleted List
+```
+- [{{title}}]({{url}})
+```
+Output:
+```
+- [GitHub: Where the world builds software](https://github.com)
+- [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com)
+```
+
+#### Numbered List
+```
+1. [{{title}}]({{url}})
+```
+Output:
+```
+1. [GitHub: Where the world builds software](https://github.com)
+2. [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com)
+```
+
+#### Task List
+```
+- [ ] [{{title}}]({{url}})
+```
+Output:
+```
+- [ ] [GitHub: Where the world builds software](https://github.com)
+- [ ] [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com)
+```
+
+#### With Group By Domain Enabled
+When grouping is enabled, domains are automatically added as headers:
+```
+## github.com
+- [GitHub: Where the world builds software](https://github.com)
+- [GitHub - microsoft/vscode: Visual Studio Code](https://github.com/microsoft/vscode)
+
+## stackoverflow.com
+- [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com)
+```
+
+### Plain Text Examples
+
+#### Basic URL List
+```
+{{url}}
+```
+Output:
+```
+https://github.com
+https://stackoverflow.com
+```
+
+#### Title and URL
+```
+{{title}} - {{url}}
+```
+Output:
+```
+GitHub: Where the world builds software - https://github.com
+Stack Overflow - Where Developers Learn, Share, & Build Careers - https://stackoverflow.com
+```
+
+#### URLs with Numbers
+```
+{{@index}}. {{url}}
+```
+Output:
+```
+1. https://github.com
+2. https://stackoverflow.com
+```
+
+#### Custom Format for Documentation
+```
+URL: {{url}}
+Title: {{title}}
+---
+```
+Output:
+```
+URL: https://github.com
+Title: GitHub: Where the world builds software
+---
+URL: https://stackoverflow.com
+Title: Stack Overflow - Where Developers Learn, Share, & Build Careers
+---
+```
+
+### Use Cases
+
+1. **Research Collection**: Use Markdown format to create a list of reference links for research
+2. **Sharing Resources**: Copy links to share with colleagues or friends
+3. **Documentation**: Create formatted documentation with links to relevant resources
+4. **Bookmarking**: Save a backup of your current browsing session
+5. **Project Management**: Create task lists with links to project resources
+
+## Installation
+
+1. Download the extension from [Chrome Web Store](#) (coming soon)
+2. Click "Add to Chrome"
+3. The Kaminari icon will appear in your browser toolbar
+
+## Privacy & Security
+
+- All operations happen locally in your browser
+- No data is ever sent to servers or stored online
+- No tracking or analytics
+- Open source - verify the code yourself
+
+## Related Links
+
+- [Source Code](https://github.com/danial2026/kaminari_extension)
+- [Developer Website](https://danials.space)
+- [Contact Developer](https://danials.space/contact)
+
+## Contributing
+
+Contributions are welcome! Feel free to submit issues and pull requests.
+
+## License
+
+This project is open source and available under the [GNU GENERAL PUBLIC LICENSE](LICENSE).

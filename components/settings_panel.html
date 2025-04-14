@@ -1,0 +1,185 @@
+<div class="settings-menu">
+  <div class="settings-header" id="mainSettingsHeader">
+    <button class="close-btn" data-target="mainSettings">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="#ffffff"
+      >
+        <path
+          d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+        />
+      </svg>
+    </button>
+    <h1 class="settings-title">Settings</h1>
+    <span style="width: 24px"></span>
+  </div>
+  <div id="mainSettingsLinks" class="main-settings-links">
+    <button
+      id="deleteCacheBtn"
+      class="settings-action-btn"
+      style="
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        margin-bottom: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        font-size: 14px;
+      "
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="white"
+        style="margin-right: 8px"
+      >
+        <path
+          d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+        />
+      </svg>
+      Delete Cache
+    </button>
+
+    <a
+      href="https://github.com/danial2026/kaminari_extension"
+      class="settings-link"
+      target="_blank"
+    >
+      Source Code
+    </a>
+    <a href="https://danials.space" class="settings-link" target="_blank">
+      Developer Website
+    </a>
+    <a
+      href="https://danials.space/contact"
+      class="settings-link"
+      target="_blank"
+    >
+      Contact Developer
+    </a>
+    <button
+      id="privacyPolicyBtn"
+      class="settings-link"
+      style="
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+      "
+    >
+      Privacy Policy
+    </button>
+    <button
+      id="termsBtn"
+      class="settings-link"
+      style="
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+      "
+    >
+      Terms of Service
+    </button>
+
+    <div
+      class="version-container"
+      style="
+        margin-top: 20px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+        font-size: 12px;
+        color: #8a8a8a;
+      "
+    >
+      <span id="versionDisplay">Version 0.3.0</span>
+    </div>
+  </div>
+
+  <div id="privacyPolicyContent" class="settings-content" style="display: none">
+    <div class="settings-header sub-header">
+      <button class="back-btn" data-target="mainSettings">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="#ffffff"
+        >
+          <path
+            d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+          />
+        </svg>
+      </button>
+      <h1 class="settings-title">Privacy Policy</h1>
+      <span style="width: 24px"></span>
+    </div>
+    <div class="settings-content-inner">
+      <p>
+        We store anonymous and encrypted links that will be deleted after 30
+        days. No personal information is collected or stored.
+      </p>
+      <p>
+        The encryption happens entirely within your browser using the password
+        you provide. This password is never sent to any server.
+      </p>
+      <p>
+        The shortened link ID itself is anonymous and does not contain any
+        information about the original content or the user who created it.
+      </p>
+      <p>
+        The service used for shortening URLs (sorame.danials.space) stores only
+        the anonymous link ID and the encrypted data blob for 30 days, after
+        which it is automatically deleted.
+      </p>
+    </div>
+  </div>
+
+  <div id="termsContent" class="settings-content" style="display: none">
+    <div class="settings-header sub-header">
+      <button class="back-btn" data-target="mainSettings">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="#ffffff"
+        >
+          <path
+            d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+          />
+        </svg>
+      </button>
+      <h1 class="settings-title">Terms of Service</h1>
+      <span style="width: 24px"></span>
+    </div>
+    <div class="settings-content-inner">
+      <p>
+        By using this extension, you agree not to share illegal, harmful, or
+        malicious content.
+      </p>
+      <p>
+        The developers are not responsible for the content shared using this
+        service.
+      </p>
+      <p>
+        The URL shortening service is provided as-is, with no guarantees of
+        uptime or reliability.
+      </p>
+      <p>We reserve the right to modify these terms at any time.</p>
+    </div>
+  </div>
+</div>

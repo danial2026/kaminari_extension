@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Kaminari",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Tab links copy utility",
   "icons": {
     "16": "icons/favicon.png",
@@ -17,7 +17,8 @@
   ],
   "host_permissions": ["<all_urls>"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
@@ -46,7 +47,12 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["lz-string.min.js", "qrcode.min.js"],
+      "resources": [
+        "lz-string.min.js",
+        "qrcode.min.js",
+        "icons/*.png",
+        "icons/*.svg"
+      ],
       "matches": ["<all_urls>"]
     }
   ]

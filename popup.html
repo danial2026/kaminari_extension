@@ -6,618 +6,11 @@
       http-equiv="Content-Security-Policy"
       content="default-src 'self' https://sorame.danials.space; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; connect-src 'self' https://sorame.danials.space;"
     />
-    <style>
-      body {
-        width: 300px;
-        min-height: 600px;
-        padding: 20px;
-        background-color: #1a1a1a;
-        color: white;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        box-sizing: border-box;
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-
-      .settings-icon {
-        color: #5d7599;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 5px;
-        transition: color 0.2s;
-      }
-
-      .settings-icon:hover {
-        color: #7a92b3;
-      }
-
-      .title {
-        font-size: 24px;
-        color: white;
-        margin: 0;
-      }
-
-      .reset-btn {
-        color: #5d7599;
-        background: none;
-        border: none;
-        cursor: pointer;
-      }
-
-      .option-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-      }
-
-      .toggle-switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 24px;
-      }
-
-      .toggle-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #2f3640;
-        border-radius: 24px;
-        transition: 0.4s;
-      }
-
-      .slider:before {
-        position: absolute;
-        content: "";
-        height: 16px;
-        width: 16px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        border-radius: 50%;
-        transition: 0.4s;
-      }
-
-      input:checked + .slider {
-        background-color: #5d7599;
-      }
-
-      input:checked + .slider:before {
-        transform: translateX(26px);
-      }
-
-      .length-slider {
-        width: 100%;
-        margin: 10px 0;
-        -webkit-appearance: none;
-        height: 4px;
-        background: #5d7599;
-        border-radius: 2px;
-        outline: none;
-      }
-
-      .length-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 16px;
-        height: 16px;
-        background: white;
-        border-radius: 50%;
-        cursor: pointer;
-      }
-
-      .text-field {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0;
-        background-color: #1e2530;
-        border: none;
-        border-radius: 5px;
-        color: #fff;
-        box-sizing: border-box;
-        animation: fadeIn 0.3s ease-in-out;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .text-field::placeholder {
-        color: #5d7599;
-      }
-
-      .section-title {
-        margin: 15px 0 10px 0;
-        color: white;
-        font-size: 14px;
-      }
-
-      .add-button {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        background-color: transparent;
-        border: 2px solid #5d7599;
-        color: #5d7599;
-        border-radius: 5px;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 20px;
-      }
-
-      .generate-btn {
-        width: 100%;
-        padding: 15px;
-        margin-top: 20px;
-        background-color: #5d7599;
-        border: none;
-        border-radius: 5px;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: bold;
-      }
-
-      html {
-        height: 600px;
-        overflow-y: auto;
-      }
-
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: #1a1a1a;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: #5d7599;
-        border-radius: 4px;
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: #4a5d7a;
-      }
-
-      .snackbar {
-        visibility: hidden;
-        min-width: 250px;
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        border-radius: 5px;
-        padding: 16px;
-        position: fixed;
-        z-index: 1000;
-        left: 20px;
-        right: 20px;
-        bottom: 20px;
-        margin: 0 auto;
-        background-color: #5d7599;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        font-size: 14px;
-      }
-
-      .snackbar.show {
-        visibility: visible;
-        animation: snackbarFadeIn 0.5s, snackbarFadeOut 0.5s 2.5s;
-      }
-
-      @keyframes snackbarFadeIn {
-        from {
-          bottom: 0;
-          opacity: 0;
-        }
-        to {
-          bottom: 20px;
-          opacity: 1;
-        }
-      }
-
-      @keyframes snackbarFadeOut {
-        from {
-          bottom: 20px;
-          opacity: 1;
-        }
-        to {
-          bottom: 0;
-          opacity: 0;
-        }
-      }
-
-      .text-field[type="date"] {
-        color: #fff;
-        background-color: #1e2530;
-      }
-
-      .text-field[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(1);
-        opacity: 0.6;
-        cursor: pointer;
-      }
-
-      .text-field[type="date"]::-webkit-calendar-picker-indicator:hover {
-        opacity: 1;
-      }
-
-      .field-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 5px 0;
-      }
-
-      .remove-button {
-        background: none;
-        border: none;
-        color: #5d7599;
-        cursor: pointer;
-        padding: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 24px;
-        transition: color 0.2s;
-      }
-
-      .remove-button:hover {
-        color: #ff4757;
-      }
-
-      .remove-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .settings-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 100%;
-        height: 100%;
-        background-color: #1c1c1c;
-        color: #ffffff;
-        z-index: 1000;
-        transition: right 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        padding: 20px;
-        box-sizing: border-box;
-        overflow-y: auto;
-      }
-
-      .settings-menu.show {
-        right: 0;
-        bottom: 0;
-      }
-
-      .settings-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #333;
-      }
-
-      .settings-title {
-        margin: 0;
-        font-size: 1.2rem;
-      }
-
-      .settings-link {
-        display: block;
-        color: #ffffff;
-        text-decoration: none;
-        padding: 15px 0;
-        font-size: 15px;
-        border-bottom: 1px solid #333;
-        background: none;
-        border: none;
-        cursor: pointer;
-        text-align: left;
-        width: 100%;
-        transition: color 0.2s;
-      }
-
-      .settings-link:hover {
-        color: #3498db;
-      }
-
-      .back-btn {
-        background: none;
-        border: none;
-        color: #ffffff;
-        cursor: pointer;
-        padding: 5px;
-      }
-
-      .settings-content {
-        flex-grow: 1;
-        overflow-y: auto;
-      }
-
-      .settings-content-inner {
-        padding: 0 10px;
-      }
-
-      .settings-content p {
-        line-height: 1.6;
-        margin-bottom: 15px;
-        font-size: 14px;
-      }
-
-      /* Folder styles */
-      .folders-container {
-        margin-top: 20px;
-        border-top: 1px solid #333;
-        padding-top: 15px;
-      }
-
-      .folder-list {
-        max-height: 200px;
-        overflow-y: auto;
-        margin: 10px 0;
-      }
-
-      .folder-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        background-color: #2f3640;
-        border-radius: 5px;
-        margin-bottom: 8px;
-        transition: background-color 0.2s;
-      }
-
-      .folder-item:hover {
-        background-color: #3f4854;
-      }
-
-      .folder-name {
-        flex-grow: 1;
-        margin-right: 10px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .folder-tabs-count {
-        color: #5d7599;
-        margin-right: 10px;
-        white-space: nowrap;
-      }
-
-      .folder-actions {
-        display: flex;
-        gap: 8px;
-      }
-
-      .folder-action {
-        background: none;
-        border: none;
-        color: #5d7599;
-        cursor: pointer;
-        padding: 4px;
-        border-radius: 4px;
-        transition: background-color 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-      }
-
-      .folder-action:hover {
-        background-color: #374151;
-      }
-
-      .folder-action svg {
-        width: 16px;
-        height: 16px;
-        transition: fill 0.2s;
-      }
-
-      .folder-action.delete-action:hover svg {
-        fill: #e74c3c;
-      }
-
-      .folder-action.share-action:hover svg {
-        fill: #3498db;
-      }
-
-      .folder-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.7);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        display: none;
-      }
-
-      .folder-modal-content {
-        background-color: #1a1a1a;
-        padding: 20px;
-        border-radius: 5px;
-        width: 300px;
-        max-width: 90%;
-      }
-
-      .folder-modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-      }
-
-      .folder-modal-title {
-        font-size: 18px;
-        margin: 0;
-      }
-
-      .modal-close-btn {
-        background: none;
-        border: none;
-        color: #5d7599;
-        cursor: pointer;
-        font-size: 18px;
-      }
-
-      .folder-form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .folder-form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-      }
-
-      .folder-form label {
-        font-size: 14px;
-      }
-
-      .folder-submit-btn {
-        background-color: #5d7599;
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-      }
-
-      /* QR Code */
-      .qr-code-container {
-        display: flex;
-        justify-content: center;
-        margin: 15px 0;
-      }
-
-      #qrcode {
-        padding: 10px;
-        background-color: white;
-        border-radius: 5px;
-      }
-
-      /* Password Input */
-      .password-container {
-        position: relative;
-      }
-
-      .password-toggle {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        color: #5d7599;
-        cursor: pointer;
-      }
-
-      /* Stats info */
-      .share-info {
-        font-size: 12px;
-        color: #999;
-        margin-top: 10px;
-      }
-
-      .settings-header.sub-header {
-        justify-content: space-between;
-        text-align: center;
-        position: relative;
-      }
-
-      .settings-header.sub-header .back-btn {
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      .settings-header.sub-header .settings-title {
-        flex-grow: 1;
-        text-align: center;
-      }
-
-      .settings-header .close-btn {
-        background: none;
-        border: none;
-        color: #5d7599;
-        cursor: pointer;
-        padding: 8px;
-        margin: -8px;
-        border-radius: 50%;
-        transition: background-color 0.2s, color 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .settings-header .close-btn:hover {
-        background-color: #333;
-        color: #ffffff;
-      }
-
-      /* Add these styles for the main settings header */
-      #mainSettingsHeader {
-        text-align: center;
-        position: relative;
-      }
-
-      #mainSettingsHeader .settings-title {
-        flex-grow: 1;
-        text-align: center;
-      }
-
-      #mainSettingsHeader .close-btn {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    </style>
+    <link rel="stylesheet" href="css/popup.css" />
   </head>
   <body>
     <div class="header">
-      <span class="settings-icon">
+      <span class="settings-icon" id="settingsToggleBtn" title="Settings">
         <svg
           width="24"
           height="24"
@@ -666,14 +59,6 @@
     </div>
 
     <div class="option-row">
-      <span>Include URLs</span>
-      <label class="toggle-switch">
-        <input type="checkbox" id="includeUrls" checked />
-        <span class="slider"></span>
-      </label>
-    </div>
-
-    <div class="option-row">
       <span>Format as Markdown</span>
       <label class="toggle-switch">
         <input type="checkbox" id="formatMarkdown" checked />
@@ -697,90 +82,87 @@
       </label>
     </div>
 
-    <div id="markdownTemplateContainer">
-      <div class="section-title">Format Template (Markdown)</div>
+    <div id="formatTemplateContainer" class="format-container">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 5px;
+        "
+      >
+        <label for="formatTemplate">Markdown Format Template</label>
+        <button id="addFormatBtn" class="reset-btn" title="Add a new format">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="#5d7599"
+          >
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+          </svg>
+          Add
+        </button>
+      </div>
+      <div class="select-container">
+        <select id="formatTemplateDropdown" class="format-dropdown">
+          <option value="[{{title}}]({{url}})">
+            Markdown link: [Title](URL)
+          </option>
+          <option value="* [{{title}}]({{url}})">
+            Markdown bullet: * [Title](URL)
+          </option>
+          <option value="- [{{title}}]({{url}})">
+            Markdown dash: - [Title](URL)
+          </option>
+          <option value="1. [{{title}}]({{url}})">
+            Markdown numbered: 1. [Title](URL)
+          </option>
+          <option value="{{title}}: {{url}}">Title: URL</option>
+          <option value="custom">Custom format...</option>
+          <!-- Custom formats will be added here -->
+        </select>
+      </div>
       <input
         type="text"
         id="formatTemplate"
-        class="text-field"
-        value="- [{{title}}]({{url}})"
-        placeholder="- [{{title}}]({{url}})"
+        class="text-field custom-format"
+        placeholder="Example: [{{title}}]({{url}})"
       />
-      <select
-        id="markdownTemplateExamples"
-        class="text-field"
-        style="margin-top: 5px; color: #5d7599"
-      >
-        <option value="" selected disabled>Select an example...</option>
-        <option value="- [{{title}}]({{url}})">Bulleted List</option>
-        <option value="{{@index}}. [{{title}}]({{url}})">Numbered List</option>
-        <option value="- [ ] [{{title}}]({{url}})">Task List</option>
-        <option value="{{@index}}. [{{title}}]({{url}})">Indexed List</option>
-        <option value="[{{title}}]({{url}})">Simple Links</option>
-      </select>
-
-      <div
-        style="
-          margin-top: 10px;
-          background-color: #1e2530;
-          border-radius: 5px;
-          padding: 8px;
-          font-size: 12px;
-          color: #aaa;
-          max-height: 40px;
-          overflow: hidden;
-        "
-      >
-        <div
-          id="formatExample"
-          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
-        ></div>
-      </div>
     </div>
 
-    <div id="plainTextTemplateContainer">
-      <div class="section-title">Plain Text Template</div>
+    <div id="plainTextTemplateContainer" class="format-container">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 5px;
+        "
+      >
+        <label for="plainTextTemplateDropdown">Plain Text Template</label>
+      </div>
+      <div class="select-container">
+        <select id="plainTextTemplateDropdown" class="format-dropdown">
+          <option value="{{title}} - {{url}}">Title - URL</option>
+          <option value="{{title}}: {{url}}">Title: URL</option>
+          <option value="{{title}}&#10;{{url}}">Title newline URL</option>
+          <option value="{{url}} ({{title}})">URL (Title)</option>
+          <option value="• {{title}}: {{url}}">• Title: URL</option>
+          <!-- Custom formats will be added here -->
+        </select>
+      </div>
       <input
         type="text"
         id="plainTextTemplate"
-        class="text-field"
-        value="{{title}} - {{url}}"
-        placeholder="{{title}} - {{url}}"
+        class="text-field custom-format"
+        placeholder="Example: {{title}} - {{url}}"
+        style="display: none !important"
       />
-      <select
-        id="plainTextTemplateExamples"
-        class="text-field"
-        style="margin-top: 5px; color: #5d7599"
-      >
-        <option value="" selected disabled>Select an example...</option>
-        <option value="{{title}} - {{url}}">Title - URL</option>
-        <option value="{{url}}">URL Only</option>
-        <option value="{{@index}}. {{url}}">Numbered URLs</option>
-        <option value="{{@index}}. {{title}}">Numbered Titles</option>
-        <option value="URL: {{url}}&#10;Title: {{title}}&#10;---">
-          Documentation Format
-        </option>
-        <option value="* {{title}} ({{url}})">Alternative List</option>
-      </select>
-
-      <div
-        style="
-          margin-top: 10px;
-          background-color: #1e2530;
-          border-radius: 5px;
-          padding: 8px;
-          font-size: 12px;
-          color: #aaa;
-          max-height: 40px;
-          overflow: hidden;
-        "
-      >
-        <div
-          id="plainTextExample"
-          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
-        ></div>
-      </div>
     </div>
+
+    <div id="formatExample" class="format-example"></div>
 
     <button id="copyAllTabs" class="generate-btn">Copy All Tabs</button>
     <button
@@ -795,7 +177,7 @@
       class="section-title"
       style="display: flex; justify-content: space-between; align-items: center"
     >
-      <span>Tab Preview</span>
+      <span>Preview</span>
       <div
         id="previewToggle"
         style="display: flex; align-items: center; cursor: pointer"
@@ -811,161 +193,32 @@
         </label>
       </div>
     </div>
-    <div
-      id="tabPreview"
-      style="
-        max-height: 300px;
-        overflow-y: auto;
-        background-color: #1e2530;
-        border-radius: 5px;
-        padding: 10px;
-      "
-    ></div>
+    <div class="tab-container">
+      <div id="tabPreview" class="tab-list"></div>
+    </div>
 
-    <div id="snackbar">Copied to clipboard!</div>
-
-    <div class="settings-menu">
-      <div class="settings-header" id="mainSettingsHeader">
-        <button class="close-btn" data-target="mainSettings">
+    <!-- Snackbar Component -->
+    <div class="snackbar" id="snackbar">
+      <div class="snackbar-content">
+        <span class="snackbar-text">Copied to clipboard!</span>
+        <button class="snackbar-close">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
-            fill="#ffffff"
+            fill="white"
           >
             <path
               d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
             />
           </svg>
         </button>
-        <h1 class="settings-title">Settings</h1>
-        <span style="width: 24px"></span>
-      </div>
-      <div id="mainSettingsLinks" class="main-settings-links">
-        <a
-          href="https://github.com/danial2026/kaminari_extension"
-          class="settings-link"
-          target="_blank"
-        >
-          Source Code
-        </a>
-        <a href="https://danials.space" class="settings-link" target="_blank">
-          Developer Website
-        </a>
-        <a
-          href="https://danials.space/contact"
-          class="settings-link"
-          target="_blank"
-        >
-          Contact Developer
-        </a>
-        <button
-          id="privacyPolicyBtn"
-          class="settings-link"
-          style="
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-            width: 100%;
-          "
-        >
-          Privacy Policy
-        </button>
-        <button
-          id="termsBtn"
-          class="settings-link"
-          style="
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-            width: 100%;
-          "
-        >
-          Terms of Service
-        </button>
-      </div>
-
-      <div
-        id="privacyPolicyContent"
-        class="settings-content"
-        style="display: none"
-      >
-        <div class="settings-header sub-header">
-          <button class="back-btn" data-target="mainSettings">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="#ffffff"
-            >
-              <path
-                d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-              />
-            </svg>
-          </button>
-          <h1 class="settings-title">Privacy Policy</h1>
-          <span style="width: 24px"></span>
-        </div>
-        <div class="settings-content-inner">
-          <p>
-            We store anonymous and encrypted links that will be deleted after 30
-            days. No personal information is collected or stored.
-          </p>
-          <p>
-            The encryption happens entirely within your browser using the
-            password you provide. This password is never sent to any server.
-          </p>
-          <p>
-            The shortened link ID itself is anonymous and does not contain any
-            information about the original content or the user who created it.
-          </p>
-          <p>
-            The service used for shortening URLs (sorame.danials.space) stores
-            only the anonymous link ID and the encrypted data blob for 30 days,
-            after which it is automatically deleted.
-          </p>
-        </div>
-      </div>
-
-      <div id="termsContent" class="settings-content" style="display: none">
-        <div class="settings-header sub-header">
-          <button class="back-btn" data-target="mainSettings">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="#ffffff"
-            >
-              <path
-                d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-              />
-            </svg>
-          </button>
-          <h1 class="settings-title">Terms of Service</h1>
-          <span style="width: 24px"></span>
-        </div>
-        <div class="settings-content-inner">
-          <p>
-            By using this extension, you agree not to share illegal, harmful, or
-            malicious content.
-          </p>
-          <p>
-            The developers are not responsible for the content shared using this
-            service.
-          </p>
-          <p>
-            The URL shortening service is provided as-is, with no guarantees of
-            uptime or reliability.
-          </p>
-          <p>We reserve the right to modify these terms at any time.</p>
-        </div>
       </div>
     </div>
+
+    <!-- Placeholder for Settings Menu -->
+    <div id="settingsMenuPlaceholder"></div>
 
     <!-- Folders Section -->
     <div class="folders-container">
@@ -989,193 +242,24 @@
       <div class="folder-list" id="folderList">
         <!-- Folder items will be inserted here -->
       </div>
-
-      <!-- Folder Actions -->
-      <div class="option-row">
-        <button id="saveToFolderBtn" class="generate-btn">
-          Save Selected Tabs to Folder
-        </button>
-      </div>
     </div>
 
-    <!-- Create Folder Modal -->
-    <div id="createFolderModal" class="folder-modal">
-      <div class="folder-modal-content">
-        <div class="folder-modal-header">
-          <h3 class="folder-modal-title">Create New Folder</h3>
-          <button class="modal-close-btn" id="closeCreateFolderModal">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="#5d7599"
-            >
-              <path
-                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-              />
-            </svg>
-          </button>
-        </div>
-        <form class="folder-form" id="createFolderForm">
-          <div class="folder-form-group">
-            <label for="folderName">Folder Name</label>
-            <input
-              type="text"
-              id="folderName"
-              name="folderName"
-              class="text-field"
-              placeholder="Enter folder name"
-              required
-            />
-          </div>
-          <div class="folder-form-group">
-            <label>Add tabs</label>
-            <div class="option-row">
-              <span>All current tabs</span>
-              <label class="toggle-switch">
-                <input type="checkbox" id="addAllTabs" />
-                <span class="slider"></span>
-              </label>
-            </div>
-            <div class="option-row">
-              <span>Only selected tabs</span>
-              <label class="toggle-switch">
-                <input type="checkbox" id="addSelectedTabs" checked />
-                <span class="slider"></span>
-              </label>
-            </div>
-          </div>
-          <button type="submit" class="folder-submit-btn">Create Folder</button>
-        </form>
-      </div>
-    </div>
+    <!-- Placeholder for Create Folder Modal -->
+    <div id="createFolderModalPlaceholder"></div>
 
-    <!-- Share Folder Modal -->
-    <div id="shareFolderModal" class="folder-modal">
-      <div class="folder-modal-content">
-        <div class="folder-modal-header">
-          <h3 class="folder-modal-title">Share Folder</h3>
-          <button class="modal-close-btn" id="closeShareFolderModal">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="#5d7599"
-            >
-              <path
-                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-              />
-            </svg>
-          </button>
-        </div>
-        <form class="folder-form" id="shareFolderForm">
-          <input type="hidden" id="shareFolderId" />
-          <div class="folder-form-group">
-            <label for="sharePassword">Password (required)</label>
-            <div class="password-container">
-              <input
-                type="password"
-                id="sharePassword"
-                name="sharePassword"
-                class="text-field"
-                placeholder="Enter a password"
-                required
-              />
-              <button type="button" class="password-toggle" id="togglePassword">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="#5d7599"
-                >
-                  <path
-                    d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <button type="submit" class="folder-submit-btn">
-            Generate Shareable Link
-          </button>
-        </form>
+    <!-- Placeholder for Share Folder Modal -->
+    <div id="shareFolderModalPlaceholder"></div>
 
-        <div id="shareResult" style="display: none">
-          <div class="folder-form-group" style="margin-top: 15px">
-            <label for="shareLink">Shortened Link</label>
-            <div style="display: flex; gap: 5px">
-              <input type="text" id="shareLink" class="text-field" readonly />
-              <button
-                class="folder-action"
-                id="copyShareLink"
-                title="Copy link"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="#5d7599"
-                >
-                  <path
-                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="folder-form-group" style="margin-top: 15px">
-            <label for="originalLink">Original Link</label>
-            <div style="display: flex; gap: 5px">
-              <input type="text" id="originalLink" class="text-field" readonly />
-              <button
-                class="folder-action"
-                id="copyOriginalLink"
-                title="Copy link"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="#5d7599"
-                >
-                  <path
-                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="qr-code-container">
-            <div id="qrcode"></div>
-          </div>
-
-          <div class="share-info" id="shareStats"></div>
-
-          <div style="margin-top: 15px; text-align: center">
-            <small>
-              This link is encrypted with your password.<br />
-              Links are stored anonymously and encrypted.<br />
-              They will be automatically deleted after 30 days.
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add the LZString library -->
-    <script src="lib/lz-string.min.js"></script>
+    <!-- Placeholder for Add Format Modal -->
+    <div id="addFormatModalPlaceholder"></div>
 
     <!-- QR Code library -->
     <script src="lib/qrcode.min.js"></script>
 
+    <!-- LZ-string for compression -->
+    <script src="lib/lz-string.min.js"></script>
+
     <!-- Main script -->
-    <script src="popup.js"></script>
+    <script src="popup.js" type="module"></script>
   </body>
 </html>
