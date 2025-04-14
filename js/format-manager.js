@@ -36,6 +36,9 @@ export function init(elements) {
   plainTextTemplateInput = elements.plainTextTemplateInput;
   formatMarkdownToggle = elements.formatMarkdownToggle;
 
+  // Expose removeFormat to window for use by the deleteButton
+  window.removeFormat = removeFormat;
+
   // Setup format dropdowns
   setupFormatDropdowns();
 

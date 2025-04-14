@@ -180,11 +180,42 @@ export function handleDropdownChange(dropdown, input, storageKey) {
 
 /**
  * Creates a delete button with a trash icon
- * @param {Function} onClick - Click handler for the button
- * @param {string} title - Button title/tooltip
+ * @param {string|Function} param1 - Either a click handler function or format type string
+ * @param {string} param2 - Either a title string or format ID
+ * @param {string} param3 - Optional format name
  * @returns {HTMLElement} - The delete button element
  */
-export function createDeleteButton(onClick, title = "Remove") {
+export function createDeleteButton(param1, param2, param3) {
+  // Check if first parameter is a function (legacy usage) or format type (new usage)
+  let onClick;
+  let title = "Remove";
+
+  if (typeof param1 === "function") {
+    // Legacy usage: createDeleteButton(onClick, title)
+    onClick = param1;
+    if (param2) title = param2;
+  } else {
+    // New usage: createDeleteButton(formatType, formatId, formatName)
+    const formatType = param1;
+    const formatId = param2;
+    if (param3) title = `Remove "${param3}"`;
+
+    // Create click handler for format removal
+    onClick = (e) => {
+      e.stopPropagation(); // Prevent dropdown from opening/closing
+      if (window.confirm(`Remove format "${param3}"?`)) {
+        // Use the removeFormat function from format-manager if available in window scope
+        if (window.removeFormat) {
+          window.removeFormat(formatType, formatId);
+        } else if (typeof removeFormat === "function") {
+          removeFormat(formatType, formatId);
+        } else {
+          console.error("removeFormat function not available");
+        }
+      }
+    };
+  }
+
   const deleteBtn = createElement(
     "button",
     {
@@ -200,7 +231,7 @@ export function createDeleteButton(onClick, title = "Remove") {
       cursor: "pointer",
       padding: "4px",
     },
-    '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>'
+    '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="red" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>'
   );
 
   if (typeof onClick === "function") {
