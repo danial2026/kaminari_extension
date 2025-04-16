@@ -177,6 +177,37 @@ Title: Stack Overflow - Where Developers Learn, Share, & Build Careers
 2. Click "Add to Chrome"
 3. The Kaminari icon will appear in your browser toolbar
 
+
+# Versions
+## Version 0.1.x
+- 0.1.0 (Initial commit - e504961)
+- Core tab links copy utility functionality
+- Basic popup interface
+- Customizable formatting (Markdown/plain text)
+- Tab filtering capabilities
+- Additional 0.1.x features:
+- Keyboard shortcut for copying all tab links (e9aaf65)
+- Enhanced filtering to exclude browser-specific URLs (750aff6)
+- Added icons and updated manifest (6aeb204, 17c8ec6)
+- Build script for Chrome packaging (98fd8c6)
+
+## Version 0.2.0 (1514f97)
+- Enhanced error handling for tab selection/clipboard operations
+- Folder management features
+- Improved UI with privacy policy and terms sections
+- Added data compression with LZString library
+- QR code generation capabilities
+- Web accessible resources support
+
+## Version 0.3.0 (06b65cc)
+- Refactored clipboard functionality with modular operations
+- New UI components for folder management and settings
+- Modal interfaces for creating/sharing folders
+- Updated Content Security Policy
+- Improved styling for popup and settings interfaces
+- Format removal functionality enhancements (dd4842d)
+
+
 ## Privacy & Security
 
 - All operations happen locally in your browser
