@@ -1,0 +1,109 @@
+<!-- Share Folder Modal -->
+<div id="shareFolderModal" class="folder-modal">
+  <div class="folder-modal-content">
+    <div class="folder-modal-header">
+      <h3 class="folder-modal-title">Share Folder</h3>
+      <button class="modal-close-btn" id="closeShareFolderModal">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="#5d7599"
+        >
+          <path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+          />
+        </svg>
+      </button>
+    </div>
+    <form class="folder-form" id="shareFolderForm">
+      <input type="hidden" id="shareFolderId" />
+      <div class="folder-form-group">
+        <label for="sharePassword">Password (required)</label>
+        <div class="password-container">
+          <input
+            type="password"
+            id="sharePassword"
+            name="sharePassword"
+            class="text-field"
+            placeholder="Enter a password"
+            required
+          />
+          <button type="button" class="password-toggle" id="togglePassword">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="#5d7599"
+            >
+              <path
+                d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="folder-submit-btn">
+        Generate Shareable Link
+      </button>
+    </form>
+
+    <div id="shareResult" style="display: none">
+      <div class="folder-form-group" style="margin-top: 15px">
+        <label for="shareLink">Shortened Link</label>
+        <div style="display: flex; gap: 5px">
+          <input type="text" id="shareLink" class="text-field" readonly />
+          <button class="folder-action" id="copyShareLink" title="Copy link">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="#5d7599"
+            >
+              <path
+                d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="folder-form-group" style="margin-top: 15px">
+        <label for="originalLink">Original Link</label>
+        <div style="display: flex; gap: 5px">
+          <input type="text" id="originalLink" class="text-field" readonly />
+          <button class="folder-action" id="copyOriginalLink" title="Copy link">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="#5d7599"
+            >
+              <path
+                d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="qr-code-container">
+        <div id="qrcode"></div>
+      </div>
+
+      <div class="share-info" id="shareStats"></div>
+
+      <div style="margin-top: 15px; text-align: center; font-size: 11px;">
+        <small>
+          This link is encrypted with your password.<br />
+          Links are stored anonymously and encrypted.<br />
+          They will be automatically deleted after 30 days.
+        </small>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@ A browser extension that helps you easily copy tab links from your browser in va
 ## Download
 
 ### Chrome Version
-Coming soon to Chrome Web Store
+Available on [Chrome Web Store](https://chromewebstore.google.com/detail/kaminari/dmbbdjlpadjgnoolmlpodepoimflnolf)
 
 ### Firefox Version
 Available on [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/kaminari/)
@@ -14,7 +14,7 @@ Available on [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/ka
 
 ## Branches
 
-### Main Branch
+### Main Branch (Chrome)
 Contains the Chrome version of the extension
 
 ### Firefox Branch 

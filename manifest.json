@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Kaminari",
-  "version": "0.1.4",
+  "version": "0.3.1",
   "description": "Tab links copy utility",
   "icons": {
     "16": "icons/favicon.png",
@@ -17,7 +17,8 @@
   ],
   "host_permissions": ["<all_urls>"],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "type": "module"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
@@ -25,15 +26,13 @@
   "commands": {
     "_execute_action": {
       "suggested_key": {
-        "default": "Alt+K",
-        "mac": "Alt+K"
+        "default": "Alt+K"
       },
       "description": "Open Kaminari tab copy popup"
     },
     "copy_all_tabs": {
       "suggested_key": {
-        "default": "Alt+Shift+K",
-        "mac": "Alt+Shift+K"
+        "default": "Alt+Shift+K"
       },
       "description": "Copy all tab links"
     }
@@ -46,10 +45,21 @@
     },
     "default_popup": "popup.html"
   },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "lz-string.min.js",
+        "qrcode.min.js",
+        "icons/*.png",
+        "icons/*.svg"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "browser_specific_settings": {
     "gecko": {
       "id": "kaminari@danials.space",
-      "strict_min_version": "109.0"
+      "strict_min_version": "58.0"
     }
   }
 }

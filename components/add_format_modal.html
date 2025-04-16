@@ -1,0 +1,50 @@
+<!-- Add Format Modal -->
+<div id="addFormatModal" class="folder-modal">
+  <div class="folder-modal-content">
+    <div class="folder-modal-header">
+      <h3 class="folder-modal-title">Add Custom Format</h3>
+      <button class="modal-close-btn" id="closeAddFormatModal">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="#5d7599"
+        >
+          <path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+          />
+        </svg>
+      </button>
+    </div>
+    <form class="folder-form" id="addFormatForm">
+      <input type="hidden" id="formatType" value="markdown" />
+      <div class="folder-form-group">
+        <label for="formatName">Format Name</label>
+        <input
+          type="text"
+          id="formatName"
+          name="formatName"
+          class="text-field"
+          placeholder="e.g. My Custom Format"
+          required
+        />
+      </div>
+      <div class="folder-form-group">
+        <label for="formatPattern">Format Pattern</label>
+        <input
+          type="text"
+          id="formatPattern"
+          name="formatPattern"
+          class="text-field"
+          placeholder="e.g. [{{title}}]({{url}})"
+          required
+        />
+        <small style="color: #8a9bae; margin-top: 5px; display: block">
+          Use {{title}} for tab title and {{url}} for tab URL
+        </small>
+      </div>
+      <button type="submit" class="folder-submit-btn">Add Format</button>
+    </form>
+  </div>
+</div>

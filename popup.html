@@ -1,374 +1,107 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
-    <style>
-      body {
-        width: 300px;
-        min-height: 600px;
-        padding: 20px;
-        background-color: #1a1a1a;
-        color: white;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        box-sizing: border-box;
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-
-      .settings-icon {
-        color: #5d7599;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 5px;
-        transition: color 0.2s;
-      }
-
-      .settings-icon:hover {
-        color: #7a92b3;
-      }
-
-      .title {
-        font-size: 24px;
-        color: white;
-        margin: 0;
-      }
-
-      .reset-btn {
-        color: #5d7599;
-        background: none;
-        border: none;
-        cursor: pointer;
-      }
-
-      .option-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-      }
-
-      .toggle-switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 24px;
-      }
-
-      .toggle-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #2f3640;
-        border-radius: 24px;
-        transition: 0.4s;
-      }
-
-      .slider:before {
-        position: absolute;
-        content: "";
-        height: 16px;
-        width: 16px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        border-radius: 50%;
-        transition: 0.4s;
-      }
-
-      input:checked + .slider {
-        background-color: #5d7599;
-      }
-
-      input:checked + .slider:before {
-        transform: translateX(26px);
-      }
-
-      .length-slider {
-        width: 100%;
-        margin: 10px 0;
-        -webkit-appearance: none;
-        height: 4px;
-        background: #5d7599;
-        border-radius: 2px;
-        outline: none;
-      }
-
-      .length-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 16px;
-        height: 16px;
-        background: white;
-        border-radius: 50%;
-        cursor: pointer;
-      }
-
-      .text-field {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0;
-        background-color: #1e2530;
-        border: none;
-        border-radius: 5px;
-        color: #fff;
-        box-sizing: border-box;
-        animation: fadeIn 0.3s ease-in-out;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .text-field::placeholder {
-        color: #5d7599;
-      }
-
-      .section-title {
-        margin: 15px 0 10px 0;
-        color: white;
-        font-size: 14px;
-      }
-
-      .add-button {
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        background-color: transparent;
-        border: 2px solid #5d7599;
-        color: #5d7599;
-        border-radius: 5px;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 20px;
-      }
-
-      .generate-btn {
-        width: 100%;
-        padding: 15px;
-        margin-top: 20px;
-        background-color: #5d7599;
-        border: none;
-        border-radius: 5px;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: bold;
-      }
-
-      html {
-        height: 600px;
-        overflow-y: auto;
-      }
-
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: #1a1a1a;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: #5d7599;
-        border-radius: 4px;
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: #4a5d7a;
-      }
-
-      .snackbar {
-        visibility: hidden;
-        min-width: 250px;
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        border-radius: 5px;
-        padding: 16px;
-        position: fixed;
-        z-index: 1000;
-        left: 20px;
-        right: 20px;
-        bottom: 20px;
-        margin: 0 auto;
-        background-color: #5d7599;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        font-size: 14px;
-      }
-
-      .snackbar.show {
-        visibility: visible;
-        animation: snackbarFadeIn 0.5s, snackbarFadeOut 0.5s 2.5s;
-      }
-
-      @keyframes snackbarFadeIn {
-        from {
-          bottom: 0;
-          opacity: 0;
-        }
-        to {
-          bottom: 20px;
-          opacity: 1;
-        }
-      }
-
-      @keyframes snackbarFadeOut {
-        from {
-          bottom: 20px;
-          opacity: 1;
-        }
-        to {
-          bottom: 0;
-          opacity: 0;
-        }
-      }
-
-      .text-field[type="date"] {
-        color: #fff;
-        background-color: #1e2530;
-      }
-
-      .text-field[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(1);
-        opacity: 0.6;
-        cursor: pointer;
-      }
-
-      .text-field[type="date"]::-webkit-calendar-picker-indicator:hover {
-        opacity: 1;
-      }
-
-      .field-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 5px 0;
-      }
-
-      .remove-button {
-        background: none;
-        border: none;
-        color: #5d7599;
-        cursor: pointer;
-        padding: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 24px;
-        transition: color 0.2s;
-      }
-
-      .remove-button:hover {
-        color: #ff4757;
-      }
-
-      .remove-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .settings-menu {
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' https://sorame.danials.space; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; connect-src 'self' https://sorame.danials.space;"
+    />
+    <link rel="stylesheet" href="css/popup.css" />
+    <script type="module" src="js/browser-polyfill.js"></script>
+  </head>
+  <body>
+    <!-- Custom Confirm Dialog - Hardcoded directly to ensure it loads -->
+    <div
+      id="customConfirmDialog"
+      class="custom-modal"
+      style="
+        display: none;
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #1a1a1a;
-        z-index: 1000;
-        display: none;
-        flex-direction: column;
-        padding: 20px;
-        box-sizing: border-box;
-        overflow-y: auto;
-      }
-
-      .settings-menu.show {
-        display: flex;
-      }
-
-      .settings-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        gap: 20px;
-        position: sticky;
-        top: 0;
-        background-color: #1a1a1a;
-        padding: 10px 0;
-        z-index: 10;
-      }
-
-      .settings-title {
-        font-size: 24px;
-        color: white;
-        margin: 0;
-      }
-
-      .close-btn {
-        color: #5d7599;
-        background: none;
-        border: none;
-        cursor: pointer;
-        display: flex;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
         align-items: center;
         justify-content: center;
-        padding: 5px;
-        transition: color 0.2s;
-      }
+      "
+    >
+      <div
+        class="custom-modal-content"
+        style="
+          background-color: #1e2430;
+          border-radius: 8px;
+          width: 90%;
+          max-width: 320px;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+          overflow: hidden;
+        "
+      >
+        <div
+          class="custom-modal-header"
+          style="padding: 12px 16px; border-bottom: 1px solid #2a3341"
+        >
+          <h3
+            class="custom-modal-title"
+            style="margin: 0; font-size: 16px; color: #ffffff"
+          >
+            Confirm Action
+          </h3>
+        </div>
+        <div
+          class="custom-modal-body"
+          id="confirmMessage"
+          style="padding: 16px; color: #bdc3cf; font-size: 14px"
+        >
+          Are you sure you want to proceed?
+        </div>
+        <div
+          class="custom-modal-footer"
+          style="
+            padding: 12px 16px;
+            border-top: 1px solid #2a3341;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+          "
+        >
+          <button
+            id="confirmCancelBtn"
+            class="modal-btn cancel-btn"
+            style="
+              padding: 8px 16px;
+              border-radius: 4px;
+              border: none;
+              font-size: 14px;
+              cursor: pointer;
+              background-color: #4a5568;
+              color: #ffffff;
+            "
+          >
+            Cancel
+          </button>
+          <button
+            id="confirmOkBtn"
+            class="modal-btn confirm-btn"
+            style="
+              padding: 8px 16px;
+              border-radius: 4px;
+              border: none;
+              font-size: 14px;
+              cursor: pointer;
+              background-color: #f44336;
+              color: #ffffff;
+            "
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
 
-      .close-btn:hover {
-        color: #7a92b3;
-      }
-
-      .settings-link {
-        padding: 15px;
-        margin: 5px 0;
-        background-color: #1e2530;
-        border: none;
-        border-radius: 5px;
-        color: white;
-        text-decoration: none;
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        transition: background-color 0.2s;
-      }
-
-      .settings-link:hover {
-        background-color: #2a3441;
-      }
-    </style>
-  </head>
-  <body>
     <div class="header">
-      <span class="settings-icon">
+      <span class="settings-icon" id="settingsToggleBtn" title="Settings">
         <svg
           width="24"
           height="24"
@@ -393,21 +126,25 @@
         </svg>
       </span>
       <h1 class="title">Kaminari</h1>
-      <button class="reset-btn">Clear</button>
+      <button class="reset-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="#5d7599"
+        >
+          <path
+            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+          />
+        </svg>
+      </button>
     </div>
 
     <div class="option-row">
       <span>Include Tab Titles</span>
       <label class="toggle-switch">
         <input type="checkbox" id="includeTitles" checked />
-        <span class="slider"></span>
-      </label>
-    </div>
-
-    <div class="option-row">
-      <span>Include URLs</span>
-      <label class="toggle-switch">
-        <input type="checkbox" id="includeUrls" checked />
         <span class="slider"></span>
       </label>
     </div>
@@ -436,90 +173,87 @@
       </label>
     </div>
 
-    <div id="markdownTemplateContainer">
-      <div class="section-title">Format Template (Markdown)</div>
+    <div id="formatTemplateContainer" class="format-container">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 5px;
+        "
+      >
+        <label for="formatTemplate">Markdown Format Template</label>
+        <button id="addFormatBtn" class="reset-btn" title="Add a new format">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="#5d7599"
+          >
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+          </svg>
+          Add
+        </button>
+      </div>
+      <div class="select-container">
+        <select id="formatTemplateDropdown" class="format-dropdown">
+          <option value="[{{title}}]({{url}})">
+            Markdown link: [Title](URL)
+          </option>
+          <option value="* [{{title}}]({{url}})">
+            Markdown bullet: * [Title](URL)
+          </option>
+          <option value="- [{{title}}]({{url}})">
+            Markdown dash: - [Title](URL)
+          </option>
+          <option value="1. [{{title}}]({{url}})">
+            Markdown numbered: 1. [Title](URL)
+          </option>
+          <option value="{{title}}: {{url}}">Title: URL</option>
+          <option value="custom">Custom format...</option>
+          <!-- Custom formats will be added here -->
+        </select>
+      </div>
       <input
         type="text"
         id="formatTemplate"
-        class="text-field"
-        value="- [{{title}}]({{url}})"
-        placeholder="- [{{title}}]({{url}})"
+        class="text-field custom-format"
+        placeholder="Example: [{{title}}]({{url}})"
       />
-      <select
-        id="markdownTemplateExamples"
-        class="text-field"
-        style="margin-top: 5px; color: #5d7599"
-      >
-        <option value="" selected disabled>Select an example...</option>
-        <option value="- [{{title}}]({{url}})">Bulleted List</option>
-        <option value="{{@index}}. [{{title}}]({{url}})">Numbered List</option>
-        <option value="- [ ] [{{title}}]({{url}})">Task List</option>
-        <option value="{{@index}}. [{{title}}]({{url}})">Indexed List</option>
-        <option value="[{{title}}]({{url}})">Simple Links</option>
-      </select>
-
-      <div
-        style="
-          margin-top: 10px;
-          background-color: #1e2530;
-          border-radius: 5px;
-          padding: 8px;
-          font-size: 12px;
-          color: #aaa;
-          max-height: 40px;
-          overflow: hidden;
-        "
-      >
-        <div
-          id="formatExample"
-          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
-        ></div>
-      </div>
     </div>
 
-    <div id="plainTextTemplateContainer">
-      <div class="section-title">Plain Text Template</div>
+    <div id="plainTextTemplateContainer" class="format-container">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 5px;
+        "
+      >
+        <label for="plainTextTemplateDropdown">Plain Text Template</label>
+      </div>
+      <div class="select-container">
+        <select id="plainTextTemplateDropdown" class="format-dropdown">
+          <option value="{{title}} - {{url}}">Title - URL</option>
+          <option value="{{title}}: {{url}}">Title: URL</option>
+          <option value="{{title}}&#10;{{url}}">Title newline URL</option>
+          <option value="{{url}} ({{title}})">URL (Title)</option>
+          <option value="• {{title}}: {{url}}">• Title: URL</option>
+          <!-- Custom formats will be added here -->
+        </select>
+      </div>
       <input
         type="text"
         id="plainTextTemplate"
-        class="text-field"
-        value="{{title}} - {{url}}"
-        placeholder="{{title}} - {{url}}"
+        class="text-field custom-format"
+        placeholder="Example: {{title}} - {{url}}"
+        style="display: none !important"
       />
-      <select
-        id="plainTextTemplateExamples"
-        class="text-field"
-        style="margin-top: 5px; color: #5d7599"
-      >
-        <option value="" selected disabled>Select an example...</option>
-        <option value="{{title}} - {{url}}">Title - URL</option>
-        <option value="{{url}}">URL Only</option>
-        <option value="{{@index}}. {{url}}">Numbered URLs</option>
-        <option value="{{@index}}. {{title}}">Numbered Titles</option>
-        <option value="URL: {{url}}&#10;Title: {{title}}&#10;---">
-          Documentation Format
-        </option>
-        <option value="* {{title}} ({{url}})">Alternative List</option>
-      </select>
-
-      <div
-        style="
-          margin-top: 10px;
-          background-color: #1e2530;
-          border-radius: 5px;
-          padding: 8px;
-          font-size: 12px;
-          color: #aaa;
-          max-height: 40px;
-          overflow: hidden;
-        "
-      >
-        <div
-          id="plainTextExample"
-          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
-        ></div>
-      </div>
     </div>
+
+    <div id="formatExample" class="format-example"></div>
 
     <button id="copyAllTabs" class="generate-btn">Copy All Tabs</button>
     <button
@@ -534,7 +268,7 @@
       class="section-title"
       style="display: flex; justify-content: space-between; align-items: center"
     >
-      <span>Tab Preview</span>
+      <span>Preview</span>
       <div
         id="previewToggle"
         style="display: flex; align-items: center; cursor: pointer"
@@ -550,66 +284,76 @@
         </label>
       </div>
     </div>
-    <div
-      id="tabPreview"
-      style="
-        max-height: 300px;
-        overflow-y: auto;
-        background-color: #1e2530;
-        border-radius: 5px;
-        padding: 10px;
-      "
-    ></div>
+    <div class="tab-container">
+      <div id="tabPreview" class="tab-list"></div>
+    </div>
 
-    <div id="snackbar">Copied to clipboard!</div>
-
-    <div class="settings-menu">
-      <div class="settings-header">
-        <h1 class="settings-title">Settings</h1>
-        <button class="close-btn">
+    <!-- Snackbar Component -->
+    <div class="snackbar" id="snackbar">
+      <div class="snackbar-content">
+        <span class="snackbar-text">Copied to clipboard!</span>
+        <button class="snackbar-close">
           <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="white"
           >
             <path
-              d="M18 6L6 18"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M6 6L18 18"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
             />
           </svg>
         </button>
       </div>
-      <a
-        href="https://github.com/danial2026/kaminari_extension"
-        class="settings-link"
-        target="_blank"
-      >
-        Source Code
-      </a>
-      <a href="https://danials.space" class="settings-link" target="_blank">
-        Developer Website
-      </a>
-      <a
-        href="https://danials.space/contact"
-        class="settings-link"
-        target="_blank"
-      >
-        Contact Developer
-      </a>
     </div>
 
-    <script src="popup.js"></script>
+    <!-- Placeholder for Settings Menu -->
+    <div id="settingsMenuPlaceholder"></div>
+
+    <!-- Folders Section -->
+    <div class="folders-container">
+      <div class="header">
+        <h2 class="title">Folders</h2>
+        <button id="createFolderBtn" class="reset-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="#5d7599"
+          >
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+          </svg>
+          New
+        </button>
+      </div>
+
+      <!-- Folder List -->
+      <div class="folder-list" id="folderList">
+        <!-- Folder items will be inserted here -->
+      </div>
+    </div>
+
+    <!-- Placeholder for Create Folder Modal -->
+    <div id="createFolderModalPlaceholder"></div>
+
+    <!-- Placeholder for Share Folder Modal -->
+    <div id="shareFolderModalPlaceholder"></div>
+
+    <!-- Placeholder for Add Format Modal -->
+    <div id="addFormatModalPlaceholder"></div>
+
+    <!-- Placeholder for Custom Confirm Dialog -->
+    <div id="confirmDialogPlaceholder"></div>
+
+    <!-- QR Code library -->
+    <script src="lib/qrcode.min.js"></script>
+
+    <!-- LZ-string for compression -->
+    <script src="lib/lz-string.min.js"></script>
+
+    <!-- Main script -->
+    <script src="popup.js" type="module"></script>
   </body>
 </html>

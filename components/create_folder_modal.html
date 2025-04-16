@@ -1,0 +1,58 @@
+<!-- Create Folder Modal -->
+<div id="createFolderModal" class="folder-modal">
+  <div class="folder-modal-content">
+    <div class="folder-modal-header">
+      <h3 class="folder-modal-title">Create New Folder</h3>
+      <button class="modal-close-btn" id="closeCreateFolderModal">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="#5d7599"
+        >
+          <path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+          />
+        </svg>
+      </button>
+    </div>
+    <form class="folder-form" id="createFolderForm">
+      <div class="folder-form-group">
+        <label for="folderName">Folder Name</label>
+        <input
+          type="text"
+          id="folderName"
+          name="folderName"
+          class="text-field"
+          placeholder="Enter folder name"
+          required
+        />
+      </div>
+      <div class="folder-form-group">
+        <label>Add tabs</label>
+        <div class="option-row">
+          <span>All current tabs</span>
+          <label class="toggle-switch">
+            <input type="radio" id="addAllTabs" name="tabsToAdd" value="all" />
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="option-row">
+          <span>Only selected tabs</span>
+          <label class="toggle-switch">
+            <input
+              type="radio"
+              id="addSelectedTabs"
+              name="tabsToAdd"
+              value="selected"
+              checked
+            />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      <button type="submit" class="folder-submit-btn">Create Folder</button>
+    </form>
+  </div>
+</div>
