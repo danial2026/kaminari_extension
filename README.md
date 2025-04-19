@@ -3,7 +3,7 @@
 A browser extension that helps you easily copy tab links from your browser in various formats.
 
 
-## Download
+## Install
 
 ### Chrome Version
 Available on [Chrome Web Store](https://chromewebstore.google.com/detail/kaminari/dmbbdjlpadjgnoolmlpodepoimflnolf)
@@ -60,170 +60,74 @@ Contains the Firefox-specific version of the extension with required manifest v2
 
 ## Features
 
-- **Copy All Tabs**: Copy links from all tabs in the current window
-- **Copy Selected Tabs**: Copy links from only the selected tabs
-- **Format Options**:
-  - Include/exclude tab titles
-  - Include/exclude URLs
-  - Format as Markdown or plain text
+- **Tab Management**:
+  - Copy links from all tabs or selected tabs
+  - Save collections of tabs to folders for later use
+  - Preview tab collections before copying
+  - Cross-browser compatibility (Chrome and Firefox)
+
+- **Format Customization**:
+  - Toggle between Markdown and plain text formatting
+  - Include or exclude tab titles and URLs
   - Customizable templates with placeholders
-- **Organization Features**:
-  - Sort tabs by position
+  - Save your favorite formatting presets
+
+- **Organization Options**:
+  - Sort tabs by position in the browser
   - Group tabs by domain with automatic headers
-  - Toggle between showing all tabs or only selected tabs
-- **Live Preview**: See how your tabs will be formatted before copying
-- **Instant Copy**: Automatically copies formatted tab links to clipboard
-- **User-Friendly Interface**: Clean, intuitive design with a dark theme
+  - Filter views to show all or selected tabs
+  - Folder management for saved tab collections
+
+- **Sharing Capabilities**:
+  - Instant clipboard copy
+  - QR code generation for tab collections
+  - Share collections with compressed data URLs
+
+- **User Experience**:
+  - Clean, intuitive interface with dark theme
+  - Live preview of formatted output
+  - Keyboard shortcuts for common actions
+  - Custom confirmation dialogs
 
 ## How to Use
 
-1. Click the Kaminari extension icon in your browser
-2. Adjust formatting options as needed:
-   - Toggle "Include Tab Titles" to include/exclude page titles
-   - Toggle "Include URLs" to include/exclude the actual URLs
-   - Toggle "Format as Markdown" to switch between Markdown and plain text
-   - Customize the format templates if needed
-3. Select tabs in your browser to work with specific tabs:
-   - The preview section will show a toggle to switch between viewing all tabs or only selected tabs
-   - Toggle "Show selected" to focus on just your selected tabs
-4. Open settings to access additional options:
-   - Enable/disable sorting by tab position
-   - Enable/disable grouping by domain
-5. Click "Copy All Tabs" to copy all open tabs in the current window
-6. Or click "Copy Selected Tabs" to copy only the tabs you've selected
-7. The formatted links will be automatically copied to your clipboard
+1. **Basic Operation**:
+   - Click the Kaminari extension icon in your browser
+   - Adjust formatting options using the toggles and selectors
+   - Click "Copy All Tabs" or "Copy Selected Tabs" to copy to clipboard
 
-## Format Templates
+2. **Saving Tab Collections**:
+   - Open the folder management panel
+   - Name your collection and click "Save Current Tabs"
+   - View and manage saved collections in the folders list
 
-Kaminari uses customizable templates with these placeholders:
-- `{{title}}`: The title of the tab
-- `{{url}}`: The URL of the tab
+3. **Customizing Output Format**:
+   - Toggle between Markdown and plain text using the format selector
+   - Enable/disable tab titles and URLs with the respective toggles
+   - Edit the format template to customize the output appearance
+   - Preview your changes in real-time
 
-Default templates:
-- Markdown: `- [{{title}}]({{url}})`
-- Plain text: `{{title}} - {{url}}`
+4. **Sharing Collections**:
+   - Select a saved folder and click "Share"
+   - Choose between clipboard text, QR code, or compressed URL
+   - Use the provided link or QR code to share with others
 
-When grouping by domain is enabled, domain headers are automatically added in the format:
-- Markdown: `## domain.com`
-- Plain text: `domain.com`
+5. **Advanced Settings**:
+   - Access the settings panel for additional options
+   - Configure domain grouping and tab sorting preferences
+   - Set keyboard shortcuts for quick access to features
+   - Manage data and privacy settings
 
-## Examples
+## Use Cases
 
-### Markdown Format Examples
-
-#### Basic Bulleted List
-```
-- [{{title}}]({{url}})
-```
-Output:
-```
-- [GitHub: Where the world builds software](https://github.com)
-- [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com)
-```
-
-#### Numbered List
-```
-1. [{{title}}]({{url}})
-```
-Output:
-```
-1. [GitHub: Where the world builds software](https://github.com)
-2. [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com)
-```
-
-#### Task List
-```
-- [ ] [{{title}}]({{url}})
-```
-Output:
-```
-- [ ] [GitHub: Where the world builds software](https://github.com)
-- [ ] [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com)
-```
-
-#### With Group By Domain Enabled
-When grouping is enabled, domains are automatically added as headers:
-```
-## github.com
-- [GitHub: Where the world builds software](https://github.com)
-- [GitHub - microsoft/vscode: Visual Studio Code](https://github.com/microsoft/vscode)
-
-## stackoverflow.com
-- [Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com)
-```
-
-### Plain Text Examples
-
-#### Basic URL List
-```
-{{url}}
-```
-Output:
-```
-https://github.com
-https://stackoverflow.com
-```
-
-#### Title and URL
-```
-{{title}} - {{url}}
-```
-Output:
-```
-GitHub: Where the world builds software - https://github.com
-Stack Overflow - Where Developers Learn, Share, & Build Careers - https://stackoverflow.com
-```
-
-#### URLs with Numbers
-```
-{{@index}}. {{url}}
-```
-Output:
-```
-1. https://github.com
-2. https://stackoverflow.com
-```
-
-#### Custom Format for Documentation
-```
-URL: {{url}}
-Title: {{title}}
----
-```
-Output:
-```
-URL: https://github.com
-Title: GitHub: Where the world builds software
----
-URL: https://stackoverflow.com
-Title: Stack Overflow - Where Developers Learn, Share, & Build Careers
----
-```
-
-### Use Cases
-
-1. **Research Collection**: Use Markdown format to create a list of reference links for research
-2. **Sharing Resources**: Copy links to share with colleagues or friends
-3. **Documentation**: Create formatted documentation with links to relevant resources
-4. **Bookmarking**: Save a backup of your current browsing session
-5. **Project Management**: Create task lists with links to project resources
-
-## Installation
-
-1. Download the extension from [Chrome Web Store](#) (coming soon)
-2. Click "Add to Chrome"
-3. The Kaminari icon will appear in your browser toolbar
-
-## Privacy & Security
-
-- All operations happen locally in your browser
-- No data is ever sent to servers or stored online
-- No tracking or analytics
-- Open source - verify the code yourself
+1. **Research Collection**: Save and organize research sources by topic
+2. **Project Management**: Group and share resource links with team members
+3. **Content Creation**: Compile reference materials for articles or documentation
+4. **Bookmark Management**: Create portable backups of important browser sessions
+5. **Knowledge Sharing**: Easily share curated link collections with colleagues
 
 ## Related Links
 
-- [Source Code](https://github.com/danial2026/kaminari_extension)
 - [Developer Website](https://danials.space)
 - [Contact Developer](https://danials.space/contact)
 
