@@ -27,7 +27,7 @@ let folders = [];
 export async function loadFolders() {
   try {
     const result = await loadFromStorage("folders");
-    folders = result.folders || [];
+    folders = Array.isArray(result.folders) ? result.folders : [];
     return folders;
   } catch (error) {
     console.error("Error loading folders:", error);
@@ -159,7 +159,7 @@ export async function deleteFolder(folderId) {
 
 /**
  * Converts a Chrome tab to our compact tab format
- * @param {chrome.tabs.Tab} chromeTab
+ * @param {browser.tabs.Tab} chromeTab
  * @returns {Tab}
  */
 export function chromeTabToCompactTab(chromeTab) {

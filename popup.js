@@ -2,7 +2,9 @@
  * popup.js - Main entry point for the popup UI
  */
 
-// Import UI components
+// Import polyfill and UI components
+import "./js/browser-polyfill.js";
+import { initCustomConfirm } from "./js/custom-confirm.js";
 import {
   initTabsUI,
   updateTabPreview,
@@ -33,10 +35,25 @@ async function loadComponent(componentName, placeholderId) {
 }
 
 // Initialize the UI when the DOM is loaded
-document.addEventListener("DOMContentLoaded", async () => {
-  console.log("DOM loaded, starting component loading");
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM loaded, initializing custom confirm dialog first");
 
-  // Load all components concurrently
+  // Initialize confirm dialog as the first thing we do
+  try {
+    initCustomConfirm();
+    console.log("Custom confirm dialog initialized successfully");
+  } catch (error) {
+    console.error("Error initializing custom confirm dialog:", error);
+  }
+
+  // Then start loading components and continue with initialization
+  loadComponentsAndInitUI();
+});
+
+// Function to load components and initialize the UI
+async function loadComponentsAndInitUI() {
+  console.log("Starting component loading");
+
   try {
     await Promise.all([
       loadComponent("settings_panel", "settingsMenuPlaceholder"),
@@ -138,7 +155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await initSettingsUI(elements);
 
     // Set up message listener for tab selection changes
-    chrome.runtime.onMessage.addListener((message) => {
+    browser.runtime.onMessage.addListener((message) => {
       if (message.action === "tabsSelected") {
         handleTabSelectionChange(message.tabIds);
       }
@@ -155,4 +172,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       setTimeout(() => snackbar.classList.remove("show"), 3000);
     }
   }
-});
+}
+
+// Check if this is the folder preview context
+if (window.location.pathname.endsWith("folder-preview.html")) {
+  console.log("Folder preview context detected.");
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+    console.log("Folder ID from URL:", id);
+    const folderIdElement = document.getElementById("folder-id");
+    if (folderIdElement) {
+      folderIdElement.textContent = `Folder ID: ${id}`;
+    } else {
+      console.error("Element with ID 'folder-id' not found.");
+    }
+  });
+}

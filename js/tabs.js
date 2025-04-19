@@ -11,7 +11,7 @@ import { showSnackbar, createElement } from "./utils.js";
  */
 export async function getCurrentWindowTabs() {
   try {
-    const tabs = await chrome.tabs.query({ currentWindow: true });
+    const tabs = await browser.tabs.query({ currentWindow: true });
     return tabs;
   } catch (error) {
     console.error("Error getting tabs:", error);
@@ -49,11 +49,11 @@ export async function saveCurrentTabs() {
 /**
  * Open a URL in a new tab
  * @param {string} url - URL to open
- * @returns {Promise<chrome.tabs.Tab>} - Promise that resolves to the created tab
+ * @returns {Promise<browser.tabs.Tab>} - Promise that resolves to the created tab
  */
 export async function openTab(url) {
   try {
-    return await chrome.tabs.create({ url });
+    return await browser.tabs.create({ url });
   } catch (error) {
     console.error("Error opening tab:", error);
     throw new Error("Failed to open tab");
@@ -63,7 +63,7 @@ export async function openTab(url) {
 /**
  * Open multiple tabs in a new window
  * @param {Array} urls - Array of URLs to open
- * @returns {Promise<chrome.windows.Window>} - Promise that resolves to the created window
+ * @returns {Promise<browser.windows.Window>} - Promise that resolves to the created window
  */
 export async function openTabsInNewWindow(urls) {
   try {
@@ -71,7 +71,7 @@ export async function openTabsInNewWindow(urls) {
       throw new Error("No URLs provided");
     }
 
-    return await chrome.windows.create({
+    return await browser.windows.create({
       url: urls,
       focused: true,
     });
@@ -90,12 +90,12 @@ export async function closeAllTabs() {
     const tabs = await getCurrentWindowTabs();
 
     // Filter out extension tabs
-    const extensionUrl = chrome.runtime.getURL("");
+    const extensionUrl = browser.runtime.getURL("");
     const tabsToClose = tabs.filter((tab) => !tab.url.startsWith(extensionUrl));
 
     const tabIds = tabsToClose.map((tab) => tab.id);
     if (tabIds.length > 0) {
-      await chrome.tabs.remove(tabIds);
+      await browser.tabs.remove(tabIds);
     }
   } catch (error) {
     console.error("Error closing tabs:", error);

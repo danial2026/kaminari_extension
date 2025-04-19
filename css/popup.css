@@ -1,7 +1,7 @@
 body {
-  width: 300px;
-  min-height: 600px;
-  padding: 20px;
+  width: 350px;
+  min-height: 640px;
+  padding: 20px 25px;
   background-color: #1a1a1a;
   color: white;
   font-family: Arial, sans-serif;
@@ -34,7 +34,7 @@ body {
 }
 
 .title {
-  font-size: 24px;
+  font-size: 22px;
   color: white;
   margin: 0;
 }
@@ -162,7 +162,7 @@ input:checked + .slider:before {
 .section-title {
   margin: 15px 0 10px 0;
   color: white;
-  font-size: 14px;
+  font-size: 22px;
 }
 
 .add-button {
@@ -177,7 +177,7 @@ input:checked + .slider:before {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .generate-btn {
@@ -189,12 +189,12 @@ input:checked + .slider:before {
   border-radius: 5px;
   color: white;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
 
 html {
-  height: 600px;
+  height: 640px;
   overflow-y: auto;
 }
 
@@ -240,7 +240,7 @@ html {
 
 .snackbar-text {
   color: white;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .snackbar-close {
@@ -345,16 +345,16 @@ html {
 }
 
 .settings-title {
-  margin: 0;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  margin-bottom: 10px;
 }
 
 .settings-link {
   display: block;
   color: #ffffff;
   text-decoration: none;
-  padding: 15px 0;
-  font-size: 15px;
+  padding: 8px 0;
+  font-size: 13px;
   border-bottom: 1px solid #333;
   background: none;
   border: none;
@@ -389,9 +389,9 @@ html {
 }
 
 .settings-content p {
-  line-height: 1.6;
+  font-size: 12px;
+  line-height: 1.5;
   margin-bottom: 15px;
-  font-size: 14px;
 }
 
 /* Folder styles */
@@ -402,24 +402,41 @@ html {
 }
 
 .folder-list {
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
   margin: 10px 0;
+  width: 100%;
+}
+
+.folder-container {
+  position: relative;
+  display: flex;
+  margin-bottom: 6px;
+  align-items: center;
+  width: 100%;
 }
 
 .folder-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 8px 10px;
   background-color: #2f3640;
-  border-radius: 5px;
-  margin-bottom: 8px;
-  transition: background-color 0.2s;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  flex: 1;
+  margin-bottom: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 0;
+  width: calc(100% - 40px);
 }
 
 .folder-item:hover {
   background-color: #3f4854;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
 }
 
 .folder-item.active {
@@ -432,6 +449,8 @@ html {
   align-items: center;
   flex-grow: 1;
   overflow: hidden;
+  min-width: 0;
+  max-width: calc(100% - 110px);
 }
 
 .folder-icon {
@@ -441,20 +460,34 @@ html {
   justify-content: center;
   color: #5d7599;
   flex-shrink: 0;
+  opacity: 0.9;
+  width: 20px;
+}
+
+.folder-icon svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s;
+}
+
+.folder-item:hover .folder-icon svg {
+  transform: translateY(-1px);
 }
 
 .folder-info {
   overflow: hidden;
   flex-grow: 1;
+  min-width: 0;
 }
 
 .folder-name {
-  font-size: 14px;
+  font-size: 13px;
   color: #ffffff;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
+  font-weight: 500;
 }
 
 .folder-meta {
@@ -468,8 +501,11 @@ html {
 
 .folder-actions {
   display: flex;
-  gap: 8px;
+  gap: 2px;
   flex-shrink: 0;
+  margin-left: auto;
+  min-width: 100px;
+  justify-content: flex-end;
 }
 
 .folder-action {
@@ -477,14 +513,16 @@ html {
   border: none;
   color: #5d7599;
   cursor: pointer;
-  padding: 4px;
+  padding: 2px;
   border-radius: 4px;
   transition: background-color 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  flex-shrink: 0;
 }
 
 .folder-action:hover {
@@ -492,8 +530,8 @@ html {
 }
 
 .folder-action svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   transition: fill 0.2s;
 }
 
@@ -503,6 +541,10 @@ html {
 
 .folder-action.share-action:hover svg {
   fill: #3498db;
+}
+
+.folder-action.add-tabs-to-folder:hover svg {
+  fill: #4caf50;
 }
 
 .folder-modal {
@@ -535,8 +577,8 @@ html {
 }
 
 .folder-modal-title {
-  font-size: 18px;
-  margin: 0;
+  font-size: 16px;
+  margin-bottom: 15px;
 }
 
 .modal-close-btn {
@@ -560,7 +602,9 @@ html {
 }
 
 .folder-form label {
-  font-size: 14px;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 11px;
 }
 
 .folder-submit-btn {
@@ -604,9 +648,9 @@ html {
 
 /* Stats info */
 .share-info {
-  font-size: 12px;
-  color: #aab8c9;
-  margin-top: 12px;
+  font-size: 10px;
+  color: #5d7599;
+  margin-top: 10px;
   padding: 8px;
   background-color: #232d3d;
   border-radius: 4px;
@@ -672,6 +716,13 @@ html {
   display: block;
   margin-bottom: 5px;
   color: #fff;
+  font-size: 11px;
+}
+
+/* Specific style for Markdown Format Template label */
+label[for="formatTemplate"] {
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .format-example {
@@ -755,7 +806,7 @@ html {
 }
 
 .tab-url {
-  font-size: 11px;
+  font-size: 9px;
   color: #666;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -763,16 +814,12 @@ html {
 }
 
 .domain-header {
-  font-size: 12px;
+  font-size: 10px;
   color: #5d7599;
   padding: 5px 0;
   margin-top: 10px;
   border-bottom: 1px solid #2a3341;
   margin-bottom: 8px;
-}
-
-.tab-list {
-  /* TODO: Add any necessary styles for the tab list */
 }
 
 /* Empty state styling */
@@ -787,93 +834,36 @@ html {
 }
 
 .empty-state h3 {
-  margin-bottom: 5px;
-  font-weight: normal;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 8px;
 }
 
 .empty-state p {
-  font-size: 12px;
-  margin: 0;
-}
-
-/* Preview mode styling */
-.preview-mode .tab-item {
-  padding: 10px;
-  border-left: none;
-  margin-bottom: 8px;
-  overflow: hidden;
-  position: relative;
-}
-
-.preview-mode .tab-title {
-  font-weight: 500;
-  margin-bottom: 5px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  line-height: 1.3;
-  max-height: 2.6em;
-  width: 100%;
-  overflow: hidden;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-}
-
-.preview-mode .tab-content {
-  width: calc(100% - 30px); /* Account for favicon width */
-  overflow: hidden;
-}
-
-.preview-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #2a3341;
-  margin-bottom: 12px;
-}
-
-.preview-header h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: normal;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 80%;
-}
-
-.preview-exit-btn {
-  background: none;
-  border: none;
+  font-size: 14px;
   color: #5d7599;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.preview-exit-btn:hover {
-  background-color: #374151;
+  margin-bottom: 24px;
+  max-width: 280px;
+  line-height: 1.5;
 }
 
 .empty-state-btn {
-  margin-top: 12px;
+  padding: 10px 16px;
   background-color: #5d7599;
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 13px;
+  transition: all 0.2s ease;
 }
 
 .empty-state-btn:hover {
-  background-color: #4a5d7a;
+  background-color: #4a618c;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(93, 117, 153, 0.3);
 }
 
 .select-container {
@@ -888,7 +878,7 @@ html {
   border: 1px solid #3a4b63;
   border-radius: 5px;
   padding: 8px 10px;
-  font-size: 13px;
+  font-size: 11px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -964,7 +954,7 @@ html {
 
 .preview-header h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: normal;
   white-space: nowrap;
   overflow: hidden;
@@ -990,27 +980,68 @@ html {
 /* Tab remove button styling */
 .tab-remove-btn {
   position: absolute;
-  right: 10px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  background-color: rgba(93, 117, 153, 0.1);
   border: none;
-  padding: 4px;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   opacity: 0.6;
-  transition: opacity 0.2s, background-color 0.2s;
-  z-index: 2;
+  transition: all 0.2s ease;
 }
 
 .tab-remove-btn:hover {
   opacity: 1;
-  background-color: #374151;
+  background-color: rgba(239, 68, 68, 0.15);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.tab-remove-btn:hover svg {
+  transform: rotate(5deg);
+  fill: #ef4444;
 }
 
 .preview-mode .tab-item:hover .tab-remove-btn {
   opacity: 0.9;
+}
+
+.folder-add-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  max-width: 32px;
+  flex-shrink: 0;
+  box-shadow: none;
+  position: relative;
+  right: 0;
+}
+
+.folder-add-button svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  margin: 0;
+}
+
+.folder-add-button:hover {
+  background-color: #5d7599;
+}
+
+.folder-add-button span {
+  display: none;
 }

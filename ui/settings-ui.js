@@ -2,6 +2,9 @@
  * settings-ui.js - UI components and handlers for settings
  */
 
+import "../js/browser-polyfill.js";
+import { customConfirm } from "../js/custom-confirm.js";
+
 // DOM element references
 let settingsIcon;
 let settingsMenu;
@@ -146,28 +149,37 @@ function setupEventListeners() {
 /**
  * Delete all cached data
  */
-function deleteCache() {
-  if (
-    confirm(
+async function deleteCache() {
+  try {
+    console.log("Delete cache triggered, showing confirm dialog");
+
+    // Use customConfirm with await
+    const confirmed = await customConfirm(
       "Are you sure you want to delete all cached data? This will remove your custom formats and preferences."
-    )
-  ) {
-    // Use callback pattern instead of Promise/await
-    chrome.storage.local.clear(() => {
-      if (chrome.runtime.lastError) {
-        console.error("Error clearing cache:", chrome.runtime.lastError);
-        showSnackbar("Error clearing cache");
-        return;
-      }
+    );
 
-      // Show success message
-      showSnackbar("Cache cleared successfully");
+    console.log("Confirm result:", confirmed);
 
-      // Reload the page to reset UI
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    });
+    if (confirmed) {
+      // Use callback pattern instead of Promise/await
+      browser.storage.local.clear(() => {
+        if (browser.runtime.lastError) {
+          console.error("Error clearing cache:", browser.runtime.lastError);
+          showSnackbar("Error clearing cache");
+          return;
+        }
+
+        // Show success message
+        showSnackbar("Cache cleared successfully");
+
+        // Reload the page to reset UI
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      });
+    }
+  } catch (error) {
+    console.error("Error in deleteCache:", error);
   }
 }
 
@@ -179,7 +191,7 @@ function setExtensionVersion() {
 
   try {
     // Get the manifest (this is synchronous in MV3)
-    const manifest = chrome.runtime.getManifest();
+    const manifest = browser.runtime.getManifest();
 
     // Set the version text
     if (manifest && manifest.version) {
@@ -223,7 +235,7 @@ async function resetSettings() {
   };
 
   // Save default settings
-  await chrome.storage.local.set(defaultSettings);
+  await browser.storage.local.set(defaultSettings);
 
   // Reload the page to apply settings
   window.location.reload();

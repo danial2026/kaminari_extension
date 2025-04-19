@@ -2,6 +2,8 @@
  * utils.js - Common utility functions for the extension
  */
 
+import { customConfirm } from "./custom-confirm.js";
+
 /**
  * Saves data to Chrome storage
  * @param {Object} data - Key-value pairs to save to storage
@@ -9,15 +11,21 @@
  */
 export function saveToStorage(data) {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.set(data, () => {
-      if (chrome.runtime.lastError) {
-        console.error("Storage error:", chrome.runtime.lastError);
-        reject(chrome.runtime.lastError);
-      } else {
-        console.log("Data saved:", data);
-        resolve();
-      }
-    });
+    try {
+      browser.storage.local.set(data, () => {
+        const error = browser.runtime.lastError;
+        if (error) {
+          console.error("Storage error:", error);
+          reject(error);
+        } else {
+          console.log("Data saved successfully");
+          resolve();
+        }
+      });
+    } catch (err) {
+      console.error("Error in saveToStorage:", err);
+      reject(err);
+    }
   });
 }
 
@@ -28,15 +36,23 @@ export function saveToStorage(data) {
  */
 export function loadFromStorage(keys) {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.get(keys, (result) => {
-      if (chrome.runtime.lastError) {
-        console.error("Storage error:", chrome.runtime.lastError);
-        reject(chrome.runtime.lastError);
-      } else {
-        console.log("Data loaded:", result);
-        resolve(result);
-      }
-    });
+    try {
+      browser.storage.local.get(keys, (result) => {
+        const error = browser.runtime.lastError;
+        if (error) {
+          console.error("Storage error:", error);
+          // Return empty object to prevent errors when destructuring
+          resolve({});
+        } else {
+          console.log("Data loaded successfully");
+          resolve(result || {});
+        }
+      });
+    } catch (err) {
+      console.error("Error in loadFromStorage:", err);
+      // Return empty object to prevent errors when destructuring
+      resolve({});
+    }
   });
 }
 
@@ -126,21 +142,47 @@ export function formatWithTemplate(template, data) {
 }
 
 /**
- * Shows a snackbar message or logs it to the console
- * @param {string} message - The message to show
+ * Shows a snackbar message
+ * @param {string} message - Message to show
  */
 export function showSnackbar(message) {
   const snackbar = document.getElementById("snackbar");
-
-  if (snackbar) {
-    snackbar.textContent = message;
-    snackbar.className = "show";
-    setTimeout(() => {
-      snackbar.className = snackbar.className.replace("show", "");
-    }, 3000);
-  } else {
-    console.log("Snackbar message:", message);
+  if (!snackbar) {
+    console.warn("Snackbar element not found");
+    return;
   }
+
+  // Find the text element within the snackbar
+  const textElement = snackbar.querySelector(".snackbar-text");
+  if (textElement) {
+    // Update the message
+    textElement.textContent = message;
+  } else {
+    // If no text element, use the snackbar itself
+    snackbar.textContent = message;
+  }
+
+  // Remove any existing show class first
+  snackbar.classList.remove("show");
+
+  // Force a reflow to restart animation
+  void snackbar.offsetWidth;
+
+  // Show the snackbar
+  snackbar.classList.add("show");
+
+  // Set up the close button
+  const closeButton = snackbar.querySelector(".snackbar-close");
+  if (closeButton) {
+    closeButton.onclick = () => {
+      snackbar.classList.remove("show");
+    };
+  }
+
+  // Auto-hide after 3 seconds
+  setTimeout(() => {
+    snackbar.classList.remove("show");
+  }, 3000);
 }
 
 /**
@@ -201,9 +243,17 @@ export function createDeleteButton(param1, param2, param3) {
     if (param3) title = `Remove "${param3}"`;
 
     // Create click handler for format removal
-    onClick = (e) => {
+    onClick = async (e) => {
       e.stopPropagation(); // Prevent dropdown from opening/closing
-      if (window.confirm(`Remove format "${param3}"?`)) {
+
+      console.log("Showing delete format confirm dialog for:", param3);
+
+      // Use customConfirm with await
+      const confirmed = await customConfirm(`Remove format "${param3}"?`);
+
+      console.log("Confirm result:", confirmed);
+
+      if (confirmed) {
         // Use the removeFormat function from format-manager if available in window scope
         if (window.removeFormat) {
           window.removeFormat(formatType, formatId);
