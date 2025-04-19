@@ -159,7 +159,7 @@ export async function deleteFolder(folderId) {
 
 /**
  * Converts a Chrome tab to our compact tab format
- * @param {chrome.tabs.Tab} chromeTab
+ * @param {browser.tabs.Tab} chromeTab
  * @returns {Tab}
  */
 export function chromeTabToCompactTab(chromeTab) {

@@ -162,9 +162,9 @@ async function deleteCache() {
 
     if (confirmed) {
       // Use callback pattern instead of Promise/await
-      chrome.storage.local.clear(() => {
-        if (chrome.runtime.lastError) {
-          console.error("Error clearing cache:", chrome.runtime.lastError);
+      browser.storage.local.clear(() => {
+        if (browser.runtime.lastError) {
+          console.error("Error clearing cache:", browser.runtime.lastError);
           showSnackbar("Error clearing cache");
           return;
         }
@@ -191,7 +191,7 @@ function setExtensionVersion() {
 
   try {
     // Get the manifest (this is synchronous in MV3)
-    const manifest = chrome.runtime.getManifest();
+    const manifest = browser.runtime.getManifest();
 
     // Set the version text
     if (manifest && manifest.version) {
@@ -235,7 +235,7 @@ async function resetSettings() {
   };
 
   // Save default settings
-  await chrome.storage.local.set(defaultSettings);
+  await browser.storage.local.set(defaultSettings);
 
   // Reload the page to apply settings
   window.location.reload();

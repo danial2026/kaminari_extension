@@ -19,11 +19,11 @@ export async function copyToClipboard(text) {
         .catch((err) => {
           console.log("Clipboard API failed, using fallback method:", err);
           // Fallback to message passing if Clipboard API fails
-          chrome.runtime.sendMessage(
+          browser.runtime.sendMessage(
             { action: "copyToClipboard", text },
             (response) => {
-              if (chrome.runtime.lastError) {
-                reject(chrome.runtime.lastError);
+              if (browser.runtime.lastError) {
+                reject(browser.runtime.lastError);
               } else if (response && response.success) {
                 resolve();
               } else {
@@ -34,11 +34,11 @@ export async function copyToClipboard(text) {
         });
     } catch (error) {
       // Fallback if navigator.clipboard is not available
-      chrome.runtime.sendMessage(
+      browser.runtime.sendMessage(
         { action: "copyToClipboard", text },
         (response) => {
-          if (chrome.runtime.lastError) {
-            reject(chrome.runtime.lastError);
+          if (browser.runtime.lastError) {
+            reject(browser.runtime.lastError);
           } else if (response && response.success) {
             resolve();
           } else {
@@ -58,25 +58,25 @@ export function copyTextToClipboard(text) {
   // Store text in local storage for retrieval
   saveToStorage({ clipboard_text: text })
     .then(() => {
-      // Find a non-chrome:// tab to execute our script in
-      chrome.tabs.query({ currentWindow: true }, function (tabs) {
+      // Find a non-browser:// tab to execute our script in
+      browser.tabs.query({ currentWindow: true }, function (tabs) {
         // Filter out browser-specific URLs
         const allowedTabs = tabs.filter(
           (tab) =>
             tab.url &&
-            !tab.url.startsWith("chrome://") &&
+            !tab.url.startsWith("browser://") &&
             !tab.url.startsWith("about:") &&
             !tab.url.startsWith("moz-extension://")
         );
 
         if (allowedTabs.length === 0) {
           // No usable tabs found, show error
-          chrome.action.setBadgeText({ text: "!" });
-          chrome.action.setBadgeBackgroundColor({ color: "#e74c3c" });
+          browser.action.setBadgeText({ text: "!" });
+          browser.action.setBadgeBackgroundColor({ color: "#e74c3c" });
 
           // Clear the badge after 3 seconds
           setTimeout(() => {
-            chrome.action.setBadgeText({ text: "" });
+            browser.action.setBadgeText({ text: "" });
           }, 3000);
           return;
         }
@@ -91,31 +91,31 @@ export function copyTextToClipboard(text) {
           targetTabId = allowedTabs[0].id;
         }
 
-        chrome.scripting
+        browser.scripting
           .executeScript({
             target: { tabId: targetTabId },
             function: executeClipboardCopy,
           })
           .then(() => {
             // Show success badge
-            chrome.action.setBadgeText({ text: "✓" });
-            chrome.action.setBadgeBackgroundColor({ color: "#5d7599" });
+            browser.action.setBadgeText({ text: "✓" });
+            browser.action.setBadgeBackgroundColor({ color: "#5d7599" });
 
             // Clear the badge after 3 seconds
             setTimeout(() => {
-              chrome.action.setBadgeText({ text: "" });
+              browser.action.setBadgeText({ text: "" });
             }, 3000);
           })
           .catch((error) => {
             console.error("Failed to execute script:", error);
 
             // Show error badge
-            chrome.action.setBadgeText({ text: "!" });
-            chrome.action.setBadgeBackgroundColor({ color: "#e74c3c" });
+            browser.action.setBadgeText({ text: "!" });
+            browser.action.setBadgeBackgroundColor({ color: "#e74c3c" });
 
             // Clear the badge after 3 seconds
             setTimeout(() => {
-              chrome.action.setBadgeText({ text: "" });
+              browser.action.setBadgeText({ text: "" });
             }, 3000);
           });
       });
@@ -127,13 +127,13 @@ export function copyTextToClipboard(text) {
 
 /**
  * This function will be injected into the active tab to perform the copy
- * Note: Cannot be an arrow function due to chrome.scripting usage
+ * Note: Cannot be an arrow function due to browser.scripting usage
  */
 export function executeClipboardCopy() {
   try {
-    chrome.storage.local.get(["clipboard_text"], function (result) {
-      if (chrome.runtime.lastError) {
-        console.error("Error accessing storage:", chrome.runtime.lastError);
+    browser.storage.local.get(["clipboard_text"], function (result) {
+      if (browser.runtime.lastError) {
+        console.error("Error accessing storage:", browser.runtime.lastError);
         return;
       }
 
@@ -153,11 +153,11 @@ export function executeClipboardCopy() {
         document.body.removeChild(textarea);
 
         // Clear the stored text
-        chrome.storage.local.remove(["clipboard_text"], function () {
-          if (chrome.runtime.lastError) {
+        browser.storage.local.remove(["clipboard_text"], function () {
+          if (browser.runtime.lastError) {
             console.error(
               "Error removing clipboard text:",
-              chrome.runtime.lastError
+              browser.runtime.lastError
             );
           }
         });
@@ -175,11 +175,11 @@ export function executeClipboardCopy() {
  * @param {number} duration - Duration to show the badge in ms
  */
 export function showBadge(text, color = "#5d7599", duration = 3000) {
-  chrome.action.setBadgeText({ text });
-  chrome.action.setBadgeBackgroundColor({ color });
+  browser.action.setBadgeText({ text });
+  browser.action.setBadgeBackgroundColor({ color });
 
   // Clear the badge after the specified duration
   setTimeout(() => {
-    chrome.action.setBadgeText({ text: "" });
+    browser.action.setBadgeText({ text: "" });
   }, duration);
 }

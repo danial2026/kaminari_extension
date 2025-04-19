@@ -7,6 +7,7 @@ import { copyToClipboard } from "../js/clipboard.js";
 import { formatTabs } from "../js/tabs-formatter.js";
 import { generateShareURL } from "../js/share.js";
 import { customConfirm } from "../js/custom-confirm.js";
+import { showSnackbar } from "../js/utils.js";
 import * as folderService from "../js/folders.js";
 
 // DOM element references
@@ -16,7 +17,6 @@ let shareFolderModal;
 let shareResult;
 let qrcodeDiv;
 let shareStatsDiv;
-let snackbar;
 
 /**
  * Initialize folder UI components
@@ -34,7 +34,6 @@ export async function initFolderUI(elements) {
     shareResult = elements.shareResult;
     qrcodeDiv = elements.qrcodeDiv;
     shareStatsDiv = elements.shareStatsDiv;
-    snackbar = elements.snackbar;
 
     // Verify essential elements with specific error messages
     const requiredElements = [
@@ -197,6 +196,11 @@ export async function renderFolderList() {
       return;
     }
 
+    // Create a container for the folder item and add button
+    const folderContainer = document.createElement("div");
+    folderContainer.className = "folder-container";
+
+    // Create the folder item
     const folderItem = document.createElement("div");
     folderItem.className = "folder-item";
     folderItem.dataset.folderId = folder.id;
@@ -229,9 +233,9 @@ export async function renderFolderList() {
         </div>
       </div>
       <div class="folder-actions">
-        <button class="folder-action preview-folder" title="Preview folder">
+        <button class="folder-action open-folder" title="Open folder in new tab">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#5d7599">
-            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
           </svg>
         </button>
         <button class="folder-action copy-folder" title="Copy folder links">
@@ -252,22 +256,72 @@ export async function renderFolderList() {
       </div>
     `;
 
-    folderList.appendChild(folderItem);
+    // Create the add button outside the folder item
+    const addButton = document.createElement("button");
+    addButton.className = "folder-add-button";
+    addButton.title = "Add tabs to folder";
+    addButton.dataset.folderId = folder.id;
+    addButton.style.background = "none"; // Remove background
+    addButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4a5d7a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    `;
 
-    // Add event listeners for folder actions
-    const previewBtn = folderItem.querySelector(".preview-folder");
-    previewBtn.addEventListener("click", () => previewFolder(folder.id));
+    // Add the folder item and add button to the container
+    folderContainer.appendChild(folderItem);
+    folderContainer.appendChild(addButton);
+
+    // Add the container to the folder list
+    folderList.appendChild(folderContainer);
+
+    // Add event listener to the add button
+    addButton.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent triggering folder card click
+      addSelectedTabsToFolder(folder.id);
+    });
+
+    // Add event listeners for other folder actions
+    const openBtn = folderItem.querySelector(".open-folder");
+    openBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent triggering folder card click
+      openFolderInNewTab(folder.id);
+    });
 
     const copyBtn = folderItem.querySelector(".copy-folder");
-    copyBtn.addEventListener("click", () => copyFolderToClipboard(folder.id));
+    copyBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent triggering folder card click
+      copyFolderToClipboard(folder.id);
+    });
 
     const shareBtn = folderItem.querySelector(".share-folder");
-    shareBtn.addEventListener("click", () => showShareFolderModal(folder.id));
+    shareBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent triggering folder card click
+      showShareFolderModal(folder.id);
+    });
 
     const deleteBtn = folderItem.querySelector(".delete-folder");
-    deleteBtn.addEventListener("click", () => confirmDeleteFolder(folder.id));
+    deleteBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent triggering folder card click
+      confirmDeleteFolder(folder.id);
+    });
+
+    // Add click event to the folder card itself to show preview
+    folderItem.addEventListener("click", () => {
+      viewFolderContents(folder.id);
+    });
   });
 }
+
+/**
+ * Opens a folder in a new tab
+ * @param {string} folderId - ID of folder to open
+ */
+export const openFolderInNewTab = (folderId) => {
+  const url = `/folder-preview.html?folderId=${encodeURIComponent(folderId)}`;
+  window.open(url, "_blank");
+};
 
 /**
  * Shows the create folder modal
@@ -307,10 +361,10 @@ export async function handleCreateFolder(e) {
 
     // Get tabs based on selection
     if (tabsToAddOption === "all") {
-      const allTabs = await chrome.tabs.query({ currentWindow: true });
+      const allTabs = await browser.tabs.query({ currentWindow: true });
       tabsToAdd = allTabs;
     } else if (tabsToAddOption === "selected") {
-      const selectedTabsInfo = await chrome.tabs.query({
+      const selectedTabsInfo = await browser.tabs.query({
         currentWindow: true,
         highlighted: true,
       });
@@ -370,34 +424,10 @@ export async function confirmDeleteFolder(folderId) {
 }
 
 /**
- * Resets the folder preview state
+ * Shows folder contents in the main view
+ * @param {string} folderId - ID of folder to view
  */
-export function exitFolderPreview() {
-  // Remove active class from any folder items
-  document.querySelectorAll(".folder-item").forEach((item) => {
-    item.classList.remove("active");
-  });
-
-  // Remove preview class from tab container
-  const tabContainer = document.querySelector(".tab-container");
-  if (tabContainer) {
-    tabContainer.classList.remove("preview-mode");
-  }
-
-  // Clear preview content
-  const tabPreview = document.getElementById("tabPreview");
-  if (tabPreview) {
-    tabPreview.innerHTML = "";
-  }
-
-  // Don't clear any cached folder data - this ensures we can refill the view when needed
-}
-
-/**
- * Shows a preview of a folder's tabs
- * @param {string} folderId - ID of folder to preview
- */
-export async function previewFolder(folderId) {
+export async function viewFolderContents(folderId) {
   // Always reload the folder data to ensure we have the latest version
   const folder = await folderService.getFolderById(folderId);
   if (!folder) {
@@ -407,7 +437,7 @@ export async function previewFolder(folderId) {
   }
 
   console.log(
-    "Loading folder preview:",
+    "Loading folder contents:",
     folder.name,
     "with",
     folder.tabs?.length || 0,
@@ -423,7 +453,7 @@ export async function previewFolder(folderId) {
     }
   });
 
-  // Add preview mode class to tab container
+  // Add preview mode class to tab container - keep the class name consistent with CSS
   const tabContainer = document.querySelector(".tab-container");
   if (!tabContainer) {
     console.warn("Tab container not found");
@@ -431,6 +461,12 @@ export async function previewFolder(folderId) {
   }
 
   tabContainer.classList.add("preview-mode");
+
+  // Hide the "Show selected" toggle when in folder view
+  const previewToggle = document.getElementById("previewToggle");
+  if (previewToggle) {
+    previewToggle.style.display = "none";
+  }
 
   // Get tab preview element
   const tabPreview = document.getElementById("tabPreview");
@@ -445,12 +481,12 @@ export async function previewFolder(folderId) {
   // Ensure folder has a name
   let folderName = folder.name || formatFolderId(folder.id) || "Unnamed Folder";
 
-  // Add preview header
+  // Add header with folder name
   const previewHeader = document.createElement("div");
-  previewHeader.className = "preview-header";
+  previewHeader.className = "preview-header"; // Keep consistent with CSS
   previewHeader.innerHTML = `
     <h3>Folder: ${folderName}</h3>
-    <button id="previewExitBtn" class="preview-exit-btn">
+    <button id="folderCloseBtn" class="folder-close-btn">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#5d7599">
         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
       </svg>
@@ -460,8 +496,8 @@ export async function previewFolder(folderId) {
 
   // Add exit button event listener
   document
-    .getElementById("previewExitBtn")
-    .addEventListener("click", exitFolderPreview);
+    .getElementById("folderCloseBtn")
+    .addEventListener("click", closeViewFolder);
 
   // Check if folder has tabs
   if (!folder.tabs || folder.tabs.length === 0) {
@@ -545,11 +581,41 @@ export async function previewFolder(folderId) {
 
     // Add click event to open tab (excluding bin icon clicks)
     tabElement.addEventListener("click", () => {
-      chrome.tabs.create({ url: tab.url });
+      browser.tabs.create({ url: tab.url });
     });
 
     tabPreview.appendChild(tabElement);
   });
+}
+
+/**
+ * Closes the folder view and resets state
+ */
+export function closeViewFolder() {
+  // Remove active class from any folder items
+  document.querySelectorAll(".folder-item").forEach((item) => {
+    item.classList.remove("active");
+  });
+
+  // Remove preview mode class from tab container
+  const tabContainer = document.querySelector(".tab-container");
+  if (tabContainer) {
+    tabContainer.classList.remove("preview-mode");
+  }
+
+  // Show the "Show selected" toggle again
+  const previewToggle = document.getElementById("previewToggle");
+  if (previewToggle) {
+    previewToggle.style.display = "flex";
+  }
+
+  // Clear preview content
+  const tabPreview = document.getElementById("tabPreview");
+  if (tabPreview) {
+    tabPreview.innerHTML = "";
+  }
+
+  // Don't clear any cached folder data - this ensures we can refill the view when needed
 }
 
 /**
@@ -568,7 +634,7 @@ export async function copyFolderToClipboard(folderId) {
     }));
 
     // Get user preferences
-    const options = await chrome.storage.local.get([
+    const options = await browser.storage.local.get([
       "includeTitles",
       "includeUrls",
       "formatMarkdown",
@@ -781,49 +847,6 @@ export function formatSize(bytes) {
 }
 
 /**
- * Shows a snackbar message
- * @param {string} message - Message to show
- */
-function showSnackbar(message) {
-  if (!snackbar) {
-    console.warn("Snackbar element not found");
-    return;
-  }
-
-  // Find the text element within the snackbar
-  const textElement = snackbar.querySelector(".snackbar-text");
-  if (!textElement) {
-    console.warn("Snackbar text element not found");
-    return;
-  }
-
-  // Update the message
-  textElement.textContent = message;
-
-  // Remove any existing show class first
-  snackbar.classList.remove("show");
-
-  // Force a reflow to restart animation
-  void snackbar.offsetWidth;
-
-  // Show the snackbar
-  snackbar.classList.add("show");
-
-  // Set up the close button
-  const closeButton = snackbar.querySelector(".snackbar-close");
-  if (closeButton) {
-    closeButton.onclick = () => {
-      snackbar.classList.remove("show");
-    };
-  }
-
-  // Auto-hide after 3 seconds
-  setTimeout(() => {
-    snackbar.classList.remove("show");
-  }, 3000);
-}
-
-/**
  * Formats a folder ID for display
  * @param {string} folderId - Raw folder ID
  * @returns {string} - Formatted folder name or ID
@@ -861,9 +884,68 @@ async function removeTabFromFolder(folderId, tabIndex) {
     showSnackbar("Tab removed from folder");
 
     // Refresh the folder preview
-    await previewFolder(folderId);
+    await viewFolderContents(folderId);
   } catch (error) {
     console.error("Error removing tab:", error);
     showSnackbar("Error removing tab");
+  }
+}
+
+/**
+ * Adds tabs to the specified folder based on the "Show selected" toggle state
+ * @param {string} folderId - ID of folder to add tabs to
+ */
+export async function addSelectedTabsToFolder(folderId) {
+  try {
+    // Get the folder
+    const folder = await folderService.getFolderById(folderId);
+    if (!folder) {
+      showSnackbar("Folder not found");
+      return;
+    }
+
+    // Get the show selected only toggle state
+    const showSelectedOnlyToggle = document.getElementById("showSelectedOnly");
+    const isShowSelectedOnly = showSelectedOnlyToggle
+      ? showSelectedOnlyToggle.checked
+      : false;
+
+    // Get tabs based on the toggle state
+    let tabs = [];
+    let selectionMessage = "";
+
+    if (isShowSelectedOnly) {
+      // Add only selected tabs when toggle is on
+      tabs = await browser.tabs.query({
+        currentWindow: true,
+        highlighted: true,
+      });
+      selectionMessage = "selected";
+    } else {
+      // Add all tabs when toggle is off
+      tabs = await browser.tabs.query({
+        currentWindow: true,
+      });
+      selectionMessage = "all";
+    }
+
+    if (!tabs || tabs.length === 0) {
+      showSnackbar("No tabs to add");
+      return;
+    }
+
+    // Add tabs to folder
+    const updatedFolder = await folderService.addTabsToFolder(folderId, tabs);
+
+    // Update UI
+    await renderFolderList();
+
+    // Show success message
+    showSnackbar(
+      `Added ${tabs.length} ${selectionMessage} tab(s) to "${folder.name}"`
+    );
+  } catch (error) {
+    console.error("Error adding tabs to folder:", error);
+    showSnackbar("Error adding tabs to folder");
   }
 }

@@ -155,7 +155,7 @@ async function loadComponentsAndInitUI() {
     await initSettingsUI(elements);
 
     // Set up message listener for tab selection changes
-    chrome.runtime.onMessage.addListener((message) => {
+    browser.runtime.onMessage.addListener((message) => {
       if (message.action === "tabsSelected") {
         handleTabSelectionChange(message.tabIds);
       }
@@ -172,4 +172,20 @@ async function loadComponentsAndInitUI() {
       setTimeout(() => snackbar.classList.remove("show"), 3000);
     }
   }
+}
+
+// Check if this is the folder preview context
+if (window.location.pathname.endsWith("folder-preview.html")) {
+  console.log("Folder preview context detected.");
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+    console.log("Folder ID from URL:", id);
+    const folderIdElement = document.getElementById("folder-id");
+    if (folderIdElement) {
+      folderIdElement.textContent = `Folder ID: ${id}`;
+    } else {
+      console.error("Element with ID 'folder-id' not found.");
+    }
+  });
 }

@@ -11,10 +11,10 @@ import { customConfirm } from "./custom-confirm.js";
  */
 export function saveToStorage(data) {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.set(data, () => {
-      if (chrome.runtime.lastError) {
-        console.error("Storage error:", chrome.runtime.lastError);
-        reject(chrome.runtime.lastError);
+    browser.storage.local.set(data, () => {
+      if (browser.runtime.lastError) {
+        console.error("Storage error:", browser.runtime.lastError);
+        reject(browser.runtime.lastError);
       } else {
         console.log("Data saved:", data);
         resolve();
@@ -30,10 +30,10 @@ export function saveToStorage(data) {
  */
 export function loadFromStorage(keys) {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.get(keys, (result) => {
-      if (chrome.runtime.lastError) {
-        console.error("Storage error:", chrome.runtime.lastError);
-        reject(chrome.runtime.lastError);
+    browser.storage.local.get(keys, (result) => {
+      if (browser.runtime.lastError) {
+        console.error("Storage error:", browser.runtime.lastError);
+        reject(browser.runtime.lastError);
       } else {
         console.log("Data loaded:", result);
         resolve(result);
@@ -128,21 +128,46 @@ export function formatWithTemplate(template, data) {
 }
 
 /**
- * Shows a snackbar message or logs it to the console
- * @param {string} message - The message to show
+ * Shows a snackbar message
+ * @param {string} message - Message to show
  */
 export function showSnackbar(message) {
-  const snackbar = document.getElementById("snackbar");
-
-  if (snackbar) {
-    snackbar.textContent = message;
-    snackbar.className = "show";
-    setTimeout(() => {
-      snackbar.className = snackbar.className.replace("show", "");
-    }, 3000);
-  } else {
-    console.log("Snackbar message:", message);
+  if (!snackbar) {
+    console.warn("Snackbar element not found");
+    return;
   }
+
+  // Find the text element within the snackbar
+  const textElement = snackbar.querySelector(".snackbar-text");
+  if (!textElement) {
+    console.warn("Snackbar text element not found");
+    return;
+  }
+
+  // Update the message
+  textElement.textContent = message;
+
+  // Remove any existing show class first
+  snackbar.classList.remove("show");
+
+  // Force a reflow to restart animation
+  void snackbar.offsetWidth;
+
+  // Show the snackbar
+  snackbar.classList.add("show");
+
+  // Set up the close button
+  const closeButton = snackbar.querySelector(".snackbar-close");
+  if (closeButton) {
+    closeButton.onclick = () => {
+      snackbar.classList.remove("show");
+    };
+  }
+
+  // Auto-hide after 3 seconds
+  setTimeout(() => {
+    snackbar.classList.remove("show");
+  }, 3000);
 }
 
 /**

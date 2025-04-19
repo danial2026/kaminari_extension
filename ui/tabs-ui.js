@@ -206,13 +206,13 @@ function setupEventListeners() {
       if (count === 0) {
         toggleLabel.textContent = "Show selected tabs only (none selected)";
       } else if (showSelectedOnlyToggle.checked) {
-        toggleLabel.textContent = `Showing ${count} selected tab${
-          count !== 1 ? "s" : ""
-        } only`;
+        toggleLabel.textContent = `Show ${selectedTabs.length} selected tab${
+          selectedTabs.length !== 1 ? "s" : ""
+        }`;
       } else {
-        toggleLabel.textContent = `Show ${count} selected tab${
-          count !== 1 ? "s" : ""
-        } only`;
+        toggleLabel.textContent = `Show all tab${
+          selectedTabs.length !== 1 ? "s" : ""
+        }`;
       }
     }
 
@@ -274,11 +274,11 @@ export async function loadTabs() {
 
   try {
     // Get all tabs in current window
-    const tabs = await chrome.tabs.query({ currentWindow: true });
+    const tabs = await browser.tabs.query({ currentWindow: true });
     console.log(`Loaded ${tabs.length} tabs from current window`);
 
     // Get highlighted (selected) tabs
-    const highlightedTabs = await chrome.tabs.query({
+    const highlightedTabs = await browser.tabs.query({
       currentWindow: true,
       highlighted: true,
     });
@@ -349,7 +349,7 @@ export async function loadTabs() {
  */
 async function loadSettings() {
   return new Promise((resolve) => {
-    chrome.storage.local.get(
+    browser.storage.local.get(
       [
         "includeTitles",
         "formatMarkdown",
@@ -449,7 +449,7 @@ function saveSettings() {
   };
 
   // Save to storage
-  chrome.storage.local.set(settings, function () {
+  browser.storage.local.set(settings, function () {
     console.log("Settings saved:", settings);
   });
 }
@@ -573,7 +573,7 @@ function createTabElement(tab) {
 
   // Add click event to focus the tab
   tabElement.addEventListener("click", () => {
-    chrome.tabs.update(tab.id, { active: true });
+    browser.tabs.update(tab.id, { active: true });
   });
 
   return tabElement;
@@ -656,13 +656,13 @@ function checkSelectedTabs() {
 
     // Update toggle label based on current toggle state
     if (showSelectedOnlyToggle && showSelectedOnlyToggle.checked) {
-      toggleLabel.textContent = `Showing ${selectedTabs.length} selected tab${
-        selectedTabs.length !== 1 ? "s" : ""
-      } only`;
-    } else {
       toggleLabel.textContent = `Show ${selectedTabs.length} selected tab${
         selectedTabs.length !== 1 ? "s" : ""
-      } only`;
+      }`;
+    } else {
+      toggleLabel.textContent = `Show all tab${
+        selectedTabs.length !== 1 ? "s" : ""
+      }`;
     }
   } else {
     copySelectedTabsBtn.disabled = true;
