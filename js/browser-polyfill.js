@@ -1,7 +1,7 @@
 /**
  * browser-polyfill.js - Compatibility layer for Chrome and Firefox extensions
  *
- * This polyfill makes browser.* APIs available as browser.* APIs and vice versa
+ * This polyfill makes chrome.* APIs available as browser.* APIs and vice versa
  * to ensure extension code works consistently across browsers.
  */
 
@@ -10,26 +10,26 @@
 
   if (
     typeof globalThis.browser === "undefined" &&
-    typeof globalThis.browser !== "undefined"
+    typeof globalThis.chrome !== "undefined"
   ) {
     // Chrome environment - expose Chrome APIs as browser.*
     globalThis.browser = {
       // Core APIs
-      runtime: browser.runtime,
-      tabs: browser.tabs,
-      storage: browser.storage,
-      scripting: browser.scripting,
-      commands: browser.commands,
+      runtime: chrome.runtime,
+      tabs: chrome.tabs,
+      storage: chrome.storage,
+      scripting: chrome.scripting,
+      commands: chrome.commands,
 
       // Expose action as browserAction for compatibility
-      action: browser.action,
+      action: chrome.action,
     };
   } else if (
-    typeof globalThis.browser === "undefined" &&
+    typeof globalThis.chrome === "undefined" &&
     typeof globalThis.browser !== "undefined"
   ) {
-    // Firefox environment - expose Firefox APIs as browser.*
-    globalThis.browser = {
+    // Firefox environment - expose Firefox APIs as chrome.*
+    globalThis.chrome = {
       // Core APIs
       runtime: browser.runtime,
       tabs: browser.tabs,
@@ -43,10 +43,10 @@
   }
 
   // Ensure promises work consistently across browsers
-  if (globalThis.browser) {
+  if (globalThis.chrome) {
     // Add lastError for Firefox
-    if (!globalThis.browser.runtime.lastError) {
-      Object.defineProperty(globalThis.browser.runtime, "lastError", {
+    if (!globalThis.chrome.runtime.lastError) {
+      Object.defineProperty(globalThis.chrome.runtime, "lastError", {
         get: function () {
           return null;
         },
