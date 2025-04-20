@@ -9,6 +9,7 @@ import { generateShareURL } from "../js/share.js";
 import { customConfirm } from "../js/custom-confirm.js";
 import { showSnackbar } from "../js/utils.js";
 import * as folderService from "../js/folders.js";
+import { updateTabPreview, loadTabs } from "../ui/tabs-ui.js";
 
 // DOM element references
 let folderList;
@@ -615,7 +616,47 @@ export function closeViewFolder() {
     tabPreview.innerHTML = "";
   }
 
-  // Don't clear any cached folder data - this ensures we can refill the view when needed
+  // Refresh the tabs display to show normal tabs again
+  if (window.updateTabPreview) {
+    window.updateTabPreview();
+  } else if (typeof updateTabPreview === "function") {
+    updateTabPreview();
+  } else {
+    // If updateTabPreview is not available, try to reload tabs
+    try {
+      if (typeof loadTabs === "function") {
+        loadTabs();
+      } else if (window.loadTabs) {
+        window.loadTabs();
+      } else {
+        // As a last resort, manually trigger tab rendering using browser API
+        browser.tabs.query({ currentWindow: true }).then((tabs) => {
+          if (!tabPreview) return;
+
+          // Simple rendering to show something rather than empty space
+          tabs.forEach((tab) => {
+            const tabElement = document.createElement("div");
+            tabElement.className = "tab-item";
+
+            tabElement.innerHTML = `
+              <img src="${
+                tab.favIconUrl || "icons/link.svg"
+              }" class="tab-favicon" 
+                  onerror="this.src='icons/link.svg'" />
+              <div class="tab-content">
+                <div class="tab-title">${tab.title || "Untitled"}</div>
+                <div class="tab-url">${tab.url}</div>
+              </div>
+            `;
+
+            tabPreview.appendChild(tabElement);
+          });
+        });
+      }
+    } catch (e) {
+      console.error("Error reloading tabs after folder close:", e);
+    }
+  }
 }
 
 /**

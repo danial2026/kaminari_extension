@@ -1045,3 +1045,33 @@ label[for="formatTemplate"] {
 .folder-add-button span {
   display: none;
 }
+
+.folder-close-btn {
+  background-color: rgba(93, 117, 153, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.folder-close-btn:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+  transform: scale(1.1);
+}
+
+.folder-close-btn svg {
+  width: 16px;
+  height: 16px;
+  transition: fill 0.2s ease, transform 0.2s ease;
+}
+
+.folder-close-btn:hover svg {
+  fill: #ef4444;
+  transform: rotate(5deg);
+}
