@@ -61,6 +61,11 @@ Contains the Firefox-specific version of the extension with required manifest v2
   - Enhanced browser compatibility in the polyfill
   - Replaced browser API calls with Chrome API calls for better cross-platform support
 
+- **0.4.2 (7ea8a9d)**
+  - Added folder close button styling for better visual feedback
+  - Enhanced tab reload functionality when closing folders
+  - Improved user experience with smoother folder transitions
+
 ## Features
 
 - **Tab Management**:
