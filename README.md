@@ -65,6 +65,9 @@ Contains the Firefox-specific version of the extension with required manifest v2
 - Added privacy policy and terms of service pages
 - Enhanced event handling with a new event-handlers.js file for better modularity and maintainability
 
+### Version 0.4.2 (e7ae5d4)
+- Updated folder-preview.html to use relative paths for script imports
+- Enhanced snackbar functionality in folder-preview.js for improved user experience and error handling
 
 ## Features
 
