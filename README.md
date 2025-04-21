@@ -57,6 +57,14 @@ Contains the Firefox-specific version of the extension with required manifest v2
 - New folder preview feature in the UI
 - Updated manifest version to reflect these changes
 
+### Version 0.4.1 (e4ef399)
+- Improved CSS styling for format examples with better readability
+- Updated formatting logic to ensure consistent display between preview and actual output
+- Enhanced UI for format templates with proper spacing and visibility
+- Implemented loading spinner in folder preview and popup UI for improved user experience
+- Added privacy policy and terms of service pages
+- Enhanced event handling with a new event-handlers.js file for better modularity and maintainability
+
 
 ## Features
 
