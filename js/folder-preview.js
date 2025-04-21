@@ -29,22 +29,32 @@ function formatDate(dateString) {
 
 // Function to show snackbar notification
 function showSnackbar(message) {
-  const snackbar = document.createElement("div");
-  snackbar.className = "snackbar";
+  // Look for existing snackbar first
+  let snackbar = document.querySelector(".snackbar");
+
+  // If no existing snackbar, create one
+  if (!snackbar) {
+    snackbar = document.createElement("div");
+    snackbar.className = "snackbar";
+    document.body.appendChild(snackbar);
+  }
+
+  // Update message
   snackbar.textContent = message;
-  document.body.appendChild(snackbar);
+
+  // Clear any existing timeouts
+  if (window.snackbarTimeout) {
+    clearTimeout(window.snackbarTimeout);
+  }
 
   // Show the snackbar
   setTimeout(() => {
     snackbar.classList.add("show");
-  }, 100);
+  }, 10);
 
-  // After 3 seconds, remove the snackbar
-  setTimeout(() => {
+  // After 3 seconds, hide the snackbar
+  window.snackbarTimeout = setTimeout(() => {
     snackbar.classList.remove("show");
-    setTimeout(() => {
-      document.body.removeChild(snackbar);
-    }, 300);
   }, 3000);
 }
 
@@ -64,9 +74,6 @@ function renderFolderInfo(folder) {
 // Function to remove a tab from a folder
 async function removeTabFromFolder(folderId, tabIndex) {
   try {
-    // Show loading while removing
-    setLoading(true);
-
     // Get the folder
     const folder = await getFolderById(folderId);
     if (!folder || !folder.tabs) return;
@@ -74,25 +81,25 @@ async function removeTabFromFolder(folderId, tabIndex) {
     // Create a new array without the tab at tabIndex
     const updatedTabs = folder.tabs.filter((_, index) => index !== tabIndex);
 
-    // Update the folder
-    await updateFolder(folderId, { tabs: updatedTabs });
+    // Update UI immediately
+    renderFolderInfo({ ...folder, tabs: updatedTabs });
+    renderTabs(updatedTabs, folderId);
 
     // Show success message
     showSnackbar("Tab removed from folder");
 
-    // Reload folder and refresh the view
-    const updatedFolder = await getFolderById(folderId);
-    if (updatedFolder) {
-      renderFolderInfo(updatedFolder);
-      renderTabs(updatedFolder.tabs, folderId);
-    }
-
-    // Hide loading after update
-    setLoading(false);
+    // Update the folder in the background
+    await updateFolder(folderId, { tabs: updatedTabs });
   } catch (error) {
     console.error("Error removing tab:", error);
     showSnackbar("Error removing tab");
-    setLoading(false);
+
+    // Refresh the view to original state in case of error
+    const folder = await getFolderById(folderId);
+    if (folder) {
+      renderFolderInfo(folder);
+      renderTabs(folder.tabs, folderId);
+    }
   }
 }
 
