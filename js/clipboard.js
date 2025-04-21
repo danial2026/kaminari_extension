@@ -66,7 +66,8 @@ export function copyTextToClipboard(text) {
             tab.url &&
             !tab.url.startsWith("browser://") &&
             !tab.url.startsWith("about:") &&
-            !tab.url.startsWith("moz-extension://")
+            !tab.url.startsWith("moz-extension://") &&
+            !tab.url.startsWith("chrome-extension://")
         );
 
         if (allowedTabs.length === 0) {
@@ -131,9 +132,14 @@ export function copyTextToClipboard(text) {
  */
 export function executeClipboardCopy() {
   try {
-    browser.storage.local.get(["clipboard_text"], function (result) {
-      if (browser.runtime.lastError) {
-        console.error("Error accessing storage:", browser.runtime.lastError);
+    // Use browser polyfill or fall back to chrome APIs directly
+    const storage = window.browser?.storage?.local || chrome.storage.local;
+    const runtime = window.browser?.runtime || chrome.runtime;
+
+    storage.get(["clipboard_text"], function (result) {
+      const error = runtime.lastError;
+      if (error) {
+        console.error("Error accessing storage:", error);
         return;
       }
 
@@ -153,12 +159,9 @@ export function executeClipboardCopy() {
         document.body.removeChild(textarea);
 
         // Clear the stored text
-        browser.storage.local.remove(["clipboard_text"], function () {
-          if (browser.runtime.lastError) {
-            console.error(
-              "Error removing clipboard text:",
-              browser.runtime.lastError
-            );
+        storage.remove(["clipboard_text"], function () {
+          if (runtime.lastError) {
+            console.error("Error removing clipboard text:", runtime.lastError);
           }
         });
       }

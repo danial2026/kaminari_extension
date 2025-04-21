@@ -75,7 +75,8 @@ browser.commands.onCommand.addListener(async (command) => {
             !tab.url.startsWith("brave://") &&
             !tab.url.startsWith("opera://") &&
             !tab.url.startsWith("vivaldi://") &&
-            !tab.url.startsWith("moz-extension://")
+            !tab.url.startsWith("moz-extension://") &&
+            !tab.url.startsWith("chrome-extension://")
         )
         .map((tab) => `- [${tab.title}](${tab.url})`)
         .join("\n");

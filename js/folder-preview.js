@@ -1,5 +1,22 @@
 import { getFolderById, updateFolder } from "./folders.js";
 
+// Function to show/hide loading spinner
+function setLoading(isLoading) {
+  const loadingContainer = document.getElementById("loadingContainer");
+  const folderInfo = document.getElementById("folderInfo");
+  const tabList = document.getElementById("tabList");
+
+  if (isLoading) {
+    loadingContainer.style.display = "flex";
+    folderInfo.style.display = "none";
+    tabList.style.display = "none";
+  } else {
+    loadingContainer.style.display = "none";
+    folderInfo.style.display = "block";
+    tabList.style.display = "block";
+  }
+}
+
 // Function to format date
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -12,22 +29,32 @@ function formatDate(dateString) {
 
 // Function to show snackbar notification
 function showSnackbar(message) {
-  const snackbar = document.createElement("div");
-  snackbar.className = "snackbar";
+  // Look for existing snackbar first
+  let snackbar = document.querySelector(".snackbar");
+
+  // If no existing snackbar, create one
+  if (!snackbar) {
+    snackbar = document.createElement("div");
+    snackbar.className = "snackbar";
+    document.body.appendChild(snackbar);
+  }
+
+  // Update message
   snackbar.textContent = message;
-  document.body.appendChild(snackbar);
+
+  // Clear any existing timeouts
+  if (window.snackbarTimeout) {
+    clearTimeout(window.snackbarTimeout);
+  }
 
   // Show the snackbar
   setTimeout(() => {
     snackbar.classList.add("show");
-  }, 100);
+  }, 10);
 
-  // After 3 seconds, remove the snackbar
-  setTimeout(() => {
+  // After 3 seconds, hide the snackbar
+  window.snackbarTimeout = setTimeout(() => {
     snackbar.classList.remove("show");
-    setTimeout(() => {
-      document.body.removeChild(snackbar);
-    }, 300);
   }, 3000);
 }
 
@@ -54,21 +81,25 @@ async function removeTabFromFolder(folderId, tabIndex) {
     // Create a new array without the tab at tabIndex
     const updatedTabs = folder.tabs.filter((_, index) => index !== tabIndex);
 
-    // Update the folder
-    await updateFolder(folderId, { tabs: updatedTabs });
+    // Update UI immediately
+    renderFolderInfo({ ...folder, tabs: updatedTabs });
+    renderTabs(updatedTabs, folderId);
 
     // Show success message
     showSnackbar("Tab removed from folder");
 
-    // Reload folder and refresh the view
-    const updatedFolder = await getFolderById(folderId);
-    if (updatedFolder) {
-      renderFolderInfo(updatedFolder);
-      renderTabs(updatedFolder.tabs, folderId);
-    }
+    // Update the folder in the background
+    await updateFolder(folderId, { tabs: updatedTabs });
   } catch (error) {
     console.error("Error removing tab:", error);
     showSnackbar("Error removing tab");
+
+    // Refresh the view to original state in case of error
+    const folder = await getFolderById(folderId);
+    if (folder) {
+      renderFolderInfo(folder);
+      renderTabs(folder.tabs, folderId);
+    }
   }
 }
 
@@ -86,11 +117,12 @@ function renderTabs(tabs, folderId) {
   tabs.forEach((tab, index) => {
     const tabItem = document.createElement("div");
     tabItem.className = "tab-item";
+    // Add data attribute for index to be used by event handlers
+    tabItem.dataset.tabIndex = index;
 
-    // Create tab content with delete button
+    // Create tab content with delete button - removed inline onerror handler
     tabItem.innerHTML = `
-      <img src="${tab.f || "../icons/link.svg"}" class="tab-favicon" 
-           onerror="this.src='../icons/link.svg'" />
+      <img src="${tab.f || "../icons/link.svg"}" class="tab-favicon" />
       <div class="tab-content">
         <div class="tab-title">${tab.t || "Untitled"}</div>
         <div class="tab-url">${tab.u}</div>
@@ -101,18 +133,6 @@ function renderTabs(tabs, folderId) {
         </svg>
       </button>
     `;
-
-    // Get delete button and add click event
-    const deleteBtn = tabItem.querySelector(".tab-remove-btn");
-    deleteBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // Prevent opening the tab
-      removeTabFromFolder(folderId, index);
-    });
-
-    // Add click event to open the tab
-    tabItem.addEventListener("click", () => {
-      window.open(tab.u, "_blank");
-    });
 
     tabListEl.appendChild(tabItem);
   });
@@ -139,6 +159,9 @@ const createEmptyState = () => {
 // Main function to load and display folder
 async function loadFolder() {
   try {
+    // Show loading state initially
+    setLoading(true);
+
     // Get folder ID from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const folderId = urlParams.get("folderId");
@@ -146,6 +169,9 @@ async function loadFolder() {
     if (!folderId) {
       throw new Error("No folder ID provided");
     }
+
+    // Add a small delay to show the loading spinner even on fast connections
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     const folder = await getFolderById(folderId);
     if (!folder) {
@@ -158,8 +184,17 @@ async function loadFolder() {
     // Render folder information and tabs
     renderFolderInfo(folder);
     renderTabs(folder.tabs, folderId);
+
+    // Listen for tab removal events from our event handlers
+    document.addEventListener("removeTabFromFolder", (e) => {
+      removeTabFromFolder(folderId, e.detail.tabIndex);
+    });
+
+    // Hide loading when done
+    setLoading(false);
   } catch (error) {
     console.error("Error loading folder:", error);
+    setLoading(false);
     document.getElementById("folderInfo").style.display = "none";
 
     const errorState = document.createElement("div");
@@ -177,6 +212,7 @@ async function loadFolder() {
     const tabListEl = document.getElementById("tabList");
     tabListEl.innerHTML = "";
     tabListEl.appendChild(errorState);
+    tabListEl.style.display = "block";
   }
 }
 

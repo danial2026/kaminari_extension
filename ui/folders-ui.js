@@ -9,7 +9,6 @@ import { generateShareURL } from "../js/share.js";
 import { customConfirm } from "../js/custom-confirm.js";
 import { showSnackbar } from "../js/utils.js";
 import * as folderService from "../js/folders.js";
-import { updateTabPreview, loadTabs } from "../ui/tabs-ui.js";
 
 // DOM element references
 let folderList;

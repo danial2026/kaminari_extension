@@ -11,15 +11,21 @@ import { customConfirm } from "./custom-confirm.js";
  */
 export function saveToStorage(data) {
   return new Promise((resolve, reject) => {
-    browser.storage.local.set(data, () => {
-      if (browser.runtime.lastError) {
-        console.error("Storage error:", browser.runtime.lastError);
-        reject(browser.runtime.lastError);
-      } else {
-        console.log("Data saved:", data);
-        resolve();
-      }
-    });
+    try {
+      browser.storage.local.set(data, () => {
+        const error = browser.runtime.lastError;
+        if (error) {
+          console.error("Storage error:", error);
+          reject(error);
+        } else {
+          console.log("Data saved successfully");
+          resolve();
+        }
+      });
+    } catch (err) {
+      console.error("Error in saveToStorage:", err);
+      reject(err);
+    }
   });
 }
 
@@ -30,15 +36,23 @@ export function saveToStorage(data) {
  */
 export function loadFromStorage(keys) {
   return new Promise((resolve, reject) => {
-    browser.storage.local.get(keys, (result) => {
-      if (browser.runtime.lastError) {
-        console.error("Storage error:", browser.runtime.lastError);
-        reject(browser.runtime.lastError);
-      } else {
-        console.log("Data loaded:", result);
-        resolve(result);
-      }
-    });
+    try {
+      browser.storage.local.get(keys, (result) => {
+        const error = browser.runtime.lastError;
+        if (error) {
+          console.error("Storage error:", error);
+          // Return empty object to prevent errors when destructuring
+          resolve({});
+        } else {
+          console.log("Data loaded successfully");
+          resolve(result || {});
+        }
+      });
+    } catch (err) {
+      console.error("Error in loadFromStorage:", err);
+      // Return empty object to prevent errors when destructuring
+      resolve({});
+    }
   });
 }
 
@@ -132,6 +146,7 @@ export function formatWithTemplate(template, data) {
  * @param {string} message - Message to show
  */
 export function showSnackbar(message) {
+  const snackbar = document.getElementById("snackbar");
   if (!snackbar) {
     console.warn("Snackbar element not found");
     return;
@@ -139,13 +154,13 @@ export function showSnackbar(message) {
 
   // Find the text element within the snackbar
   const textElement = snackbar.querySelector(".snackbar-text");
-  if (!textElement) {
-    console.warn("Snackbar text element not found");
-    return;
+  if (textElement) {
+    // Update the message
+    textElement.textContent = message;
+  } else {
+    // If no text element, use the snackbar itself
+    snackbar.textContent = message;
   }
-
-  // Update the message
-  textElement.textContent = message;
 
   // Remove any existing show class first
   snackbar.classList.remove("show");

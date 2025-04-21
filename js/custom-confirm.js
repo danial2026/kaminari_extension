@@ -5,30 +5,39 @@
  * confirm dialog, which can be problematic in Firefox extensions.
  */
 
+// Check if we're in a window context before accessing window
+const isWindowContext = typeof window !== "undefined";
+
 let confirmDialog;
 let confirmMessage;
 let confirmOkBtn;
 let confirmCancelBtn;
 let confirmPromiseResolve = null;
 
-// Directly override window.confirm as early as possible
-const originalConfirm = window.confirm;
-window.confirm = function (message) {
-  console.log("window.confirm intercepted:", message);
+// Only override window.confirm in window contexts
+if (isWindowContext) {
+  // Directly override window.confirm as early as possible
+  const originalConfirm = window.confirm;
+  window.confirm = function (message) {
+    console.log("window.confirm intercepted:", message);
 
-  if (confirmDialog && confirmMessage) {
-    console.log("Using custom dialog implementation");
-    return customConfirm(message);
-  } else {
-    console.warn("Custom confirm not initialized, using original");
-    return originalConfirm.call(window, message);
-  }
-};
+    if (confirmDialog && confirmMessage) {
+      console.log("Using custom dialog implementation");
+      return customConfirm(message);
+    } else {
+      console.warn("Custom confirm not initialized, using original");
+      return originalConfirm.call(window, message);
+    }
+  };
+}
 
 /**
  * Initialize the custom confirm dialog
  */
 export function initCustomConfirm() {
+  // Skip in non-window contexts like service workers
+  if (!isWindowContext) return;
+
   // Get dialog elements
   confirmDialog = document.getElementById("customConfirmDialog");
   confirmMessage = document.getElementById("confirmMessage");
@@ -68,6 +77,9 @@ export function initCustomConfirm() {
  * @returns {Promise<boolean>} - Promise resolving to user's choice (true for OK, false for Cancel)
  */
 export function customConfirm(message) {
+  // Skip in non-window contexts
+  if (!isWindowContext) return Promise.resolve(false);
+
   if (!confirmDialog || !confirmMessage) {
     console.error("Custom confirm dialog not initialized");
     return Promise.resolve(false);
