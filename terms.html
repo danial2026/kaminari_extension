@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms of Service - Kaminari</title>
+    <style>
+      :root {
+        --primary-color: #5d7599;
+        --secondary-color: #9eb8de;
+        --dark-bg: #121212;
+        --card-bg: #1e2430;
+        --text-color: #ffffff;
+        --text-secondary: #8b95a5;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        line-height: 1.6;
+        background-color: var(--dark-bg);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        flex-grow: 1;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #2a3341;
+        padding-bottom: 20px;
+      }
+
+      .logo {
+        font-size: 28px;
+        font-weight: bold;
+        margin-right: 25px;
+        background: linear-gradient(
+          45deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo img {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+      }
+
+      .card {
+        background: linear-gradient(145deg, var(--card-bg), #2a3446);
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3),
+          0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+        color: var(--secondary-color);
+        font-weight: 600;
+      }
+
+      h2 {
+        font-size: 24px;
+        color: var(--secondary-color);
+        margin-top: 30px;
+        margin-bottom: 15px;
+      }
+
+      p {
+        margin-bottom: 16px;
+        font-size: 16px;
+        color: var(--text-color);
+      }
+
+      .highlight {
+        padding: 20px;
+        background-color: rgba(93, 117, 153, 0.1);
+        border-left: 4px solid var(--primary-color);
+        border-radius: 5px;
+        margin: 25px 0;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.2);
+        color: var(--text-secondary);
+        font-size: 14px;
+        margin-top: 40px;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        color: var(--secondary-color);
+        text-decoration: none;
+        margin-top: 20px;
+        transition: color 0.2s ease;
+      }
+
+      .back-link:hover {
+        color: var(--text-color);
+      }
+
+      .back-link svg {
+        margin-right: 8px;
+        width: 20px;
+        height: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="logo">
+          <img src="icons/favicon.png" alt="Kaminari Logo" />
+          Kaminari
+        </div>
+      </div>
+
+      <div class="card">
+        <h1>Terms of Service</h1>
+
+        <div class="highlight">
+          <p>
+            <strong>Summary:</strong> Use this extension responsibly, abide by
+            these terms, and understand that we are not responsible for content
+            shared through the service.
+          </p>
+        </div>
+
+        <h2>User Responsibility</h2>
+        <p>
+          By using this extension, you agree not to share illegal, harmful, or
+          malicious content.
+        </p>
+
+        <h2>Limitation of Liability</h2>
+        <p>
+          The developers are not responsible for the content shared using this
+          service.
+        </p>
+
+        <h2>Service Availability</h2>
+        <p>
+          The URL shortening service is provided as-is, with no guarantees of
+          uptime or reliability.
+        </p>
+
+        <h2>Changes to Terms</h2>
+        <p>We reserve the right to modify these terms at any time.</p>
+
+        <a href="javascript:history.back()" class="back-link">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+            />
+          </svg>
+          Back
+        </a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2023 Kaminari Extension. All rights reserved.</p>
+    </div>
+  </body>
+</html>

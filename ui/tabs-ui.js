@@ -623,6 +623,8 @@ function updateFormatExamples() {
     return;
   }
 
+  console.log("Updating format example");
+
   // Set default templates if they're empty
   if (!formatTemplateInput.value) {
     formatTemplateInput.value = "[{{title}}]({{url}})";
@@ -639,7 +641,19 @@ function updateFormatExamples() {
     plainTextTemplate: plainTextTemplateInput.value,
   };
 
-  formatExample.textContent = generateFormatExample(options);
+  console.log("Format example options:", JSON.stringify(options));
+
+  // Force example to always have title and URL for better visualization
+  if (!options.includeTitles) {
+    console.log("Overriding includeTitles for example display");
+    options.includeTitles = true;
+  }
+
+  const exampleText = generateFormatExample(options);
+  console.log("Generated example text:", exampleText);
+
+  formatExample.textContent = exampleText;
+  formatExample.style.display = "block";
 }
 
 /**

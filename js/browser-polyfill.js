@@ -45,7 +45,7 @@
   // Ensure promises work consistently across browsers
   if (globalThis.chrome) {
     // Add lastError for Firefox
-    if (!globalThis.chrome.runtime.lastError) {
+    if (globalThis.chrome.runtime && !globalThis.chrome.runtime.lastError) {
       Object.defineProperty(globalThis.chrome.runtime, "lastError", {
         get: function () {
           return null;

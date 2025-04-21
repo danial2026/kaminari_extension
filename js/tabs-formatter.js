@@ -132,8 +132,8 @@ export function formatTabs(tabs, options = {}) {
 }
 
 /**
- * Format a single tab according to user preferences
- * @param {Object} tab - Tab object
+ * Format a single tab based on options
+ * @param {Object} tab - Tab object with title and url
  * @param {boolean} includeTitles - Whether to include titles
  * @param {boolean} formatMarkdown - Whether to format as Markdown
  * @param {string} formatTemplate - Template for Markdown formatting
@@ -150,6 +150,16 @@ export function formatSingleTab(
   // Prepare tab data
   const title = tab.title || "";
   const url = tab.url || "";
+
+  // For the format example display, always include a full example
+  if (url === "https://example.com") {
+    // This is the example tab, always show a complete example
+    if (formatMarkdown) {
+      return formatWithTemplate(formatTemplate, { title, url });
+    } else {
+      return formatWithTemplate(plainTextTemplate, { title, url });
+    }
+  }
 
   // Only include title if requested, but always include URL
   if (!includeTitles) {
