@@ -66,6 +66,13 @@ Contains the Firefox-specific version of the extension with required manifest v2
   - Enhanced tab reload functionality when closing folders
   - Improved user experience with smoother folder transitions
 
+- **0.4.3 (835852e)**
+  - Added loading spinner component for smoother UI feedback during tab operations
+  - Enhanced tab handling with improved error recovery and state management
+  - Implemented new privacy policy and terms of service pages for compliance
+  - Refactored event handling into dedicated event-handlers.js module
+  - Optimized clipboard functionality for better cross-browser compatibility
+
 ## Features
 
 - **Tab Management**:
